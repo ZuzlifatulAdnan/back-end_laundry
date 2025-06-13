@@ -54,7 +54,7 @@
                         class="form-control @error('password') is-invalid
 
                     @enderror" name="password"
-                        tabindex="2" required>
+                        tabindex="2" placeholder="Masukkan Password Baru"  required>
                     @error('password')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -66,7 +66,7 @@
                     <div class="d-block">
                         <label for="password" class="control-label">Konfirmasi Password</label>
                     </div>
-                    <input id="password" type="password"
+                    <input id="password" type="password" placeholder="Masukkan Konfirmasi password" 
                         class="form-control @error('password') is-invalid
 
                     @enderror"

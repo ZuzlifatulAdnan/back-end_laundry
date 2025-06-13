@@ -26,7 +26,7 @@
                     <input id="email" type="email"
                         class="form-control @error('email') is-invalid
                     @enderror" name="email"
-                        tabindex="1" required autofocus>
+                        tabindex="1" placeholder="Masukkan Email"  required autofocus>
                     @error('email')
                         <div class="invalid-feedback">
                             {{ $message }}

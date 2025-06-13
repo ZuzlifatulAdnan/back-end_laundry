@@ -60,8 +60,8 @@
                                             <select id="status" class="form-control" name="status" required
                                                 onchange="toggleAdditionalInputs()">
                                                 <option value="">Pilih Status</option>
-                                                <option value="Aktif">Ready</option>
-                                                <option value="Nonaktif">Tidak Ready</option>
+                                                <option value="Ready">Ready</option>
+                                                <option value="Tidak Ready">Tidak Ready</option>
                                             </select>
                                             @error('status')
                                                 <div class="invalid-feedback">{{ $message }}</div>

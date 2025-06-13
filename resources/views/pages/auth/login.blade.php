@@ -22,7 +22,7 @@
                     <input id="email" type="text"
                         class="form-control @error('email') is-invalid
                     @enderror" name="email"
-                        tabindex="1" required autofocus>
+                        tabindex="1" placeholder="Masukkan Email"  required autofocus>
                     @error('email')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -37,7 +37,7 @@
                     </div>
                     <input id="password" type="password"
                         class="form-control @error('password') is-invalid
-                    @enderror" name="password"
+                    @enderror" name="password" placeholder="Masukkan Password" 
                         tabindex="2" required>
                     @error('password')
                         <div class="invalid-feedback">

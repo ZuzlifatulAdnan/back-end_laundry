@@ -72,11 +72,11 @@
                             {{-- Bagian Umum --}}
                             <div class="form-group">
                                 <label for="tanggal_order">Tanggal Order</label>
-                                <input type="date" name="tanggal_order" id="tanggal_order" class="form-control" required>
+                                <input type="date" name="tanggal_order" id="tanggal_order" class="form-control">
                             </div>
                             <div class="form-group">
                                 <label for="jam_order">Jam Order</label>
-                                <input type="time" name="jam_order" id="jam_order" class="form-control" required>
+                                <input type="time" name="jam_order" id="jam_order" class="form-control">
                             </div>
                             <div class="form-group">
                                 <label for="catatan">Catatan</label>

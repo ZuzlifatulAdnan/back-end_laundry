@@ -26,7 +26,7 @@
                 <div class="form-group">
                     <label for="name">Nama Lengkap</label>
                     <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name"
-                        value="{{ old('name') }}" required autofocus>
+                        value="{{ old('name') }}" placeholder="Masukkan Nama Lengkap Pelanggan"  required autofocus>
                     @error('name')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -35,7 +35,7 @@
                 <div class="form-group">
                     <label for="email">Email</label>
                     <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email"
-                        value="{{ old('email') }}" required>
+                        value="{{ old('email') }}" placeholder="Masukkan Email"   required>
                     @error('email')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -44,7 +44,7 @@
                 <div class="form-group">
                     <label for="password">Password</label>
                     <input id="password" type="password" class="form-control @error('password') is-invalid @enderror"
-                        name="password" required>
+                        name="password" placeholder="Masukkan Password"  required>
                     @error('password')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -54,7 +54,7 @@
                     <label for="password_confirmation">Konfirmasi Password</label>
                     <input id="password_confirmation" type="password"
                         class="form-control @error('password_confirmation') is-invalid @enderror"
-                        name="password_confirmation" required>
+                        name="password_confirmation" placeholder="Masukkan Password Konfirmasi"  required>
                     @error('password_confirmation')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -63,7 +63,8 @@
                 <div class="form-group">
                     <label for="no_handphone">No. Handphone</label>
                     <input id="no_handphone" type="text" class="form-control @error('no_handphone') is-invalid @enderror"
-                        name="no_handphone" value="{{ old('no_handphone') }}" required>
+                        name="no_handphone" value="{{ old('no_handphone') }}" placeholder="Masukkan No Handphone 62821xxx" 
+                         required>
                     @error('no_handphone')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
