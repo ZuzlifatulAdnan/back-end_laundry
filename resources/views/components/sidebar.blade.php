@@ -10,11 +10,12 @@
                 <img src="{{ asset('img/logo/logo.png') }}" alt="Logo" style="width: 40px; height: auto;">
             </a>
         </div>
+
         <ul class="sidebar-menu">
             <li class="menu-header">Dashboard</li>
             <li class="nav-item dropdown {{ $type_menu === 'beranda' ? 'active' : '' }}">
                 <a href="{{ route('beranda.index') }}" class="nav-link ha">
-                    <i class="fas fa-tachometer-alt"></i><span>Beranda</span>
+                    <i class="fas fa-home"></i><span>Beranda</span>
                 </a>
             </li>
 
@@ -23,17 +24,17 @@
             {{-- Kelola Orderan --}}
             <li class="nav-item dropdown {{ $type_menu === 'kelola' ? 'active' : '' }}">
                 <a href="#" class="nav-link has-dropdown">
-                    <i class="fas fa-box-open"></i><span>Kelola Orderan</span>
+                    <i class="fas fa-boxes"></i><span>Kelola Orderan</span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li class='{{ Request::is('kelolaOrder') ? 'active' : '' }}'>
-                        <a class="nav-link" href="{{ route('kelolaOrder.index') }}">Data Order</a>
+                    <li class="{{ request()->is('kelolaOrder') ? 'active' : '' }}">
+                        <a class="nav-link" href="">Data Order</a>
                     </li>
-                    <li class="{{ Request::is('kelola/terima') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ url('kelolaOrder/terima') }}">Data Order Diterima</a>
+                    <li class="{{ request()->is('kelolaOrder/terima') ? 'active' : '' }}">
+                        <a class="nav-link" href="">Data Order Diterima</a>
                     </li>
-                    <li class="{{ Request::is('kelola/proses') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ url('kelolaOrder/proses') }}">Data Order Diproses</a>
+                    <li class="{{ request()->is('kelolaOrder/proses') ? 'active' : '' }}">
+                        <a class="nav-link" href="">Data Order Diproses</a>
                     </li>
                 </ul>
             </li>
@@ -41,17 +42,17 @@
             {{-- Kelola Pembayaran --}}
             <li class="nav-item dropdown {{ $type_menu === 'pembayaran' ? 'active' : '' }}">
                 <a href="#" class="nav-link has-dropdown">
-                    <i class="fas fa-money-check-alt"></i><span>Kelola Pembayaran</span>
+                    <i class="fas fa-wallet"></i><span>Kelola Pembayaran</span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li class='{{ Request::is('kelolaPembayaran') ? 'active' : '' }}'>
-                        <a class="nav-link" href="{{ route('kelolaPembayaran.index') }}">Data Pembayaran</a>
+                    <li class="{{ request()->is('kelolaPembayaran') ? 'active' : '' }}">
+                        <a class="nav-link" href="">Data Pembayaran</a>
                     </li>
-                    <li class="{{ Request::is('kelolaPembayaran/terima') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ url('kelolaPembayaran/terima') }}">Pembayaran Diterima</a>
+                    <li class="{{ request()->is('kelolaPembayaran/terima') ? 'active' : '' }}">
+                        <a class="nav-link" href="">Pembayaran Diterima</a>
                     </li>
-                    <li class="{{ Request::is('kelolaPembayaran/proses') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ url('kelolaPembayaran/proses') }}">Pembayaran Diproses</a>
+                    <li class="{{ request()->is('kelolaPembayaran/proses') ? 'active' : '' }}">
+                        <a class="nav-link" href="">Pembayaran Diproses</a>
                     </li>
                 </ul>
             </li>
@@ -59,26 +60,29 @@
             {{-- Mesin --}}
             <li class="nav-item dropdown {{ $type_menu === 'mesin' ? 'active' : '' }}">
                 <a href="{{ route('mesin.index') }}" class="nav-link ha">
-                    <i class="fas fa-cogs"></i><span>Mesin</span>
+                    <i class="fas fa-tools"></i><span>Mesin</span>
                 </a>
             </li>
 
             {{-- Order --}}
             <li class="nav-item dropdown {{ $type_menu === 'order' ? 'active' : '' }}">
-                <a href="{{ route('order.index') }}" class="nav-link ha">
-                    <i class="fas fa-shopping-cart"></i><span>Order</span>
+                <a href="#" class="nav-link has-dropdown">
+                    <i class="fas fa-shopping-basket"></i><span>Order</span>
                 </a>
+                <ul class="dropdown-menu">
+                    <li class="{{ request()->is('order/dropoff') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ url('order/dropoff') }}">Drop Off</a>
+                    </li>
+                    <li class="{{ request()->is('order/selfservice') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ url('order/selfservice') }}">Self Service</a>
+                    </li>
+                </ul>
             </li>
-            {{-- Riwayat Order --}}
-            <li class="nav-item dropdown {{ $type_menu === 'riwayatOrder' ? 'active' : '' }}">
-                <a href="" class="nav-link ha">
-                    <i class="fas fa-shopping-cart"></i><span>Riwayat Order</span>
-                </a>
-            </li>
-            {{-- Riwayat Pembayaran --}}
-            <li class="nav-item dropdown {{ $type_menu === 'riwayatPembayaran' ? 'active' : '' }}">
-                <a href="{{ route('riwayatPembayaran.index') }}" class="nav-link ha">
-                    <i class="fas fa-history"></i><span>Riwayat Pembayaran</span>
+
+            {{-- Riwayat --}}
+            <li class="nav-item dropdown {{ $type_menu === 'riwayat' ? 'active' : '' }}">
+                <a href="{{ route('riwayat.index') }}" class="nav-link ha">
+                    <i class="fas fa-history"></i><span>Riwayat</span>
                 </a>
             </li>
 
@@ -86,7 +90,7 @@
             @if (Auth::user()->role == 'Admin')
                 <li class="nav-item dropdown {{ $type_menu === 'user' ? 'active' : '' }}">
                     <a href="{{ route('user.index') }}" class="nav-link ha">
-                        <i class="fas fa-users-cog"></i><span>Users</span>
+                        <i class="fas fa-user-cog"></i><span>Users</span>
                     </a>
                 </li>
             @endif

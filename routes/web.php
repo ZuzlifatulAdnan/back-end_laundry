@@ -7,8 +7,10 @@ use App\Http\Controllers\MesinController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RiwayatController;
 use App\Http\Controllers\RiwayatPembayaranController;
 use App\Http\Controllers\UserController;
+use Hamcrest\Number\OrderingComparison;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/beranda');
@@ -23,15 +25,17 @@ Route::middleware(['auth'])->group(function () {
   // mesin
   Route::resource('mesin', MesinController::class);
   // Order
-  Route::resource('order', OrderController::class);
+  Route::get('/order/selfservice', [OrderController::class, 'selfservice'])->name('order.selfservice');
+  Route::post('/order/selfservice', [OrderController::class, 'storeSelfservice'])->name('order.storeSelfservice');
+  Route::get('/order/dropoff', [OrderController::class, 'dropoff'])->name('order.dropoff');
+  Route::post('/order/dropoff', [OrderController::class, 'storeDropoff'])->name('order.storeDropoff');
   // Pembayaran
   Route::resource('pembayaran', PembayaranController::class);
   // riwayat pembayaran
-  Route::resource('riwayatPembayaran', RiwayatPembayaranController::class);
+  Route::resource('riwayat', RiwayatController::class);
   // User
   Route::resource('user', UserController::class);
   // Profile
-  // Route::resource('profile', ProfileController::class);
   Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
   Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
   Route::post('/profile/update/{user}', [ProfileController::class, 'update'])->name('profile.update');

@@ -33,6 +33,6 @@ class order extends Model
     }
     public function pembayaran()
     {
-        return $this->belongsTo(pembayaran::class);
+        return $this->hasOne(pembayaran::class);
     }
 }
