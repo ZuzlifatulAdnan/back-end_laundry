@@ -22,19 +22,19 @@
             <li class="menu-header">Master Data</li>
 
             {{-- Kelola Orderan --}}
-            <li class="nav-item dropdown {{ $type_menu === 'kelola' ? 'active' : '' }}">
+            <li class="nav-item dropdown {{ $type_menu === 'kelolaOrder' ? 'active' : '' }}">
                 <a href="#" class="nav-link has-dropdown">
                     <i class="fas fa-boxes"></i><span>Kelola Orderan</span>
                 </a>
                 <ul class="dropdown-menu">
                     <li class="{{ request()->is('kelolaOrder') ? 'active' : '' }}">
-                        <a class="nav-link" href="">Data Order</a>
+                        <a class="nav-link" href="{{ route('kelolaOrder.index') }}">Data Order</a>
                     </li>
-                    <li class="{{ request()->is('kelolaOrder/terima') ? 'active' : '' }}">
-                        <a class="nav-link" href="">Data Order Diterima</a>
+                    <li class="{{ request()->is('kelolaOrder/diterima') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('kelolaOrder.diterima') }}">Data Order Diterima</a>
                     </li>
                     <li class="{{ request()->is('kelolaOrder/proses') ? 'active' : '' }}">
-                        <a class="nav-link" href="">Data Order Diproses</a>
+                        <a class="nav-link" href="{{ route('kelolaOrder.proses') }}">Data Order Diproses</a>
                     </li>
                 </ul>
             </li>

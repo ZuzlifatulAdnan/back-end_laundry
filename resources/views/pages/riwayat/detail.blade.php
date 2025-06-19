@@ -53,12 +53,12 @@
                                         <span class="badge badge-primary">Diterima</span>
                                     @break
 
-                                    @case('Ditolak')
-                                        <span class="badge badge-danger">Ditolak</span>
+                                    @case('Dibatalkan')
+                                        <span class="badge badge-danger">Dibatalkan</span>
                                     @break
 
-                                    @case('Dibatalkan')
-                                        <span class="badge badge-dark">Dibatalkan</span>
+                                    @case('Ditunda')
+                                        <span class="badge badge-dark">Ditunda</span>
                                     @break
 
                                     @case('Selesai')

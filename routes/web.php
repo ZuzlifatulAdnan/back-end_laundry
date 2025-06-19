@@ -19,9 +19,17 @@ Route::middleware(['auth'])->group(function () {
   // beranda
   Route::resource('beranda', BerandaController::class);
   // Kelola Order
+  Route::get('/kelolaOrder/proses', [KelolaOrderController::class, 'showProses'])->name('kelolaOrder.proses');
+  Route::put('/kelolaOrder/update-status/{id}', [KelolaOrderController::class, 'updateStatus'])->name('kelolaOrder.updateStatus');
+  Route::get('/kelolaOrder/diterima', [KelolaOrderController::class, 'showDiterima'])->name('kelolaOrder.diterima');
+  // Route::put('/kelolaOrder/update-status/{id}', [KelolaOrderController::class, 'updateStatus'])->name('kelolaOrder.updateStatus');
+  Route::put('/kelolaOrder/auto-batal/{id}', [KelolaOrderController::class, 'autoBatal']);
+
   Route::resource('kelolaOrder', KelolaOrderController::class);
+
   // kolal pembayran
   Route::resource('kelolaPembayaran', KelolaPembayaranController::class);
+
   // mesin
   Route::resource('mesin', MesinController::class);
   // Order
