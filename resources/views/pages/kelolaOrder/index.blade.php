@@ -47,6 +47,14 @@
                                                             <option value="Dibatalkan"
                                                                 {{ request('status') == 'Dibatalkan' ? 'selected' : '' }}>
                                                                 Dibatalkan</option>
+                                                            <option value="Ditunda"
+                                                                {{ request('status') == 'Ditunda' ? 'selected' : '' }}>
+                                                                Ditunda
+                                                            </option>
+                                                            <option value="Diterima"
+                                                                {{ request('status') == 'Diterima' ? 'selected' : '' }}>
+                                                                Diterima
+                                                            </option>
                                                         </select>
                                                     </div>
                                                     <div class="col-md-2 mb-2">

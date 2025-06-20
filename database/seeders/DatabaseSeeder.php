@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'user',
                 'email' => 'user@gmail.com',
                 'password' => Hash::make('12345678'),
-                'role' => 'Pelanggan',
+                'role' => 'Customer',
                 'created_at' => date('Y-m-d H:i:s')
             ]
         ]);

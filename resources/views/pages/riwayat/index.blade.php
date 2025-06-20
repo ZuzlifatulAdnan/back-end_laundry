@@ -16,6 +16,104 @@
                         <h4>Riwayat Order</h4>
                     </div>
                     <div class="card-body">
+                        {{-- Filter & Tambah --}}
+                        <div class="mb-3">
+                            <div class="row align-items-end">
+                                <div class="col-md-10">
+                                    <form action="{{ route('riwayat.index') }}" method="GET">
+                                        <div class="form-row row mb-3">
+                                            {{-- Status Order --}}
+                                            <div class="col-md-2 mb-2">
+                                                <select name="status" class="form-control">
+                                                    <option value="">Status Order</option>
+                                                    <option value="Diproses"
+                                                        {{ request('status') == 'Diproses' ? 'selected' : '' }}>Diproses
+                                                    </option>
+                                                    <option value="Selesai"
+                                                        {{ request('status') == 'Selesai' ? 'selected' : '' }}>Selesai
+                                                    </option>
+                                                    <option value="Dibatalkan"
+                                                        {{ request('status') == 'Dibatalkan' ? 'selected' : '' }}>Dibatalkan
+                                                    </option>
+                                                    <option value="Ditunda"
+                                                        {{ request('status') == 'Ditunda' ? 'selected' : '' }}>
+                                                        Ditunda
+                                                    </option>
+                                                    <option value="Diterima"
+                                                        {{ request('status') == 'Diterima' ? 'selected' : '' }}>
+                                                        Diterima
+                                                    </option>
+                                                </select>
+                                            </div>
+
+                                            {{-- Status Pembayaran --}}
+                                            <div class="col-md-2 mb-2">
+                                                <select name="status_pembayaran" class="form-control">
+                                                    <option value="">Status Pembayaran</option>
+                                                    <option value="Pembayaran Berhasil"
+                                                        {{ request('status_pembayaran') == 'Pembayaran Berhasil' ? 'selected' : '' }}>
+                                                        Pembayaran Berhasil</option>
+                                                    <option value="Proses Pembayaran"
+                                                        {{ request('status_pembayaran') == 'Proses Pembayaran' ? 'selected' : '' }}>
+                                                        Proses Pembayaran</option>
+                                                    <option value="Menunggu Pembayaran"
+                                                        {{ request('status_pembayaran') == 'Menunggu Pembayaran' ? 'selected' : '' }}>
+                                                        Menunggu Pembayaran</option>
+                                                </select>
+                                            </div>
+
+                                            {{-- Bulan --}}
+                                            <div class="col-md-2 mb-2">
+                                                <select name="bulan" class="form-control">
+                                                    <option value="">Semua Bulan</option>
+                                                    @foreach (range(1, 12) as $m)
+                                                        <option value="{{ $m }}"
+                                                            {{ request('bulan') == $m ? 'selected' : '' }}>
+                                                            {{ DateTime::createFromFormat('!m', $m)->format('F') }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+
+                                            {{-- Tahun --}}
+                                            <div class="col-md-2 mb-2">
+                                                <select name="tahun" class="form-control">
+                                                    <option value="">Semua Tahun</option>
+                                                    @for ($y = date('Y'); $y >= date('Y') - 10; $y--)
+                                                        <option value="{{ $y }}"
+                                                            {{ request('tahun') == $y ? 'selected' : '' }}>
+                                                            {{ $y }}</option>
+                                                    @endfor
+                                                </select>
+                                            </div>
+
+                                            {{-- Sort By --}}
+                                            <div class="col-md-2 mb-2">
+                                                <select name="sort" class="form-control">
+                                                    <option value="desc"
+                                                        {{ request('sort') == 'desc' ? 'selected' : '' }}>Terbaru</option>
+                                                    <option value="asc"
+                                                        {{ request('sort') == 'asc' ? 'selected' : '' }}>Terlama</option>
+                                                </select>
+                                            </div>
+
+                                            {{-- Search --}}
+                                            <div class="col-md-2 mb-2">
+                                                <div class="input-group">
+                                                    <input type="text" name="search" class="form-control"
+                                                        placeholder="Cari Nama User" value="{{ request('search') }}">
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-primary" type="submit"><i
+                                                                class="fas fa-search"></i></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
                         <div class="table-responsive">
                             <table class="table table-hover table-bordered">
                                 <thead>
@@ -81,7 +179,7 @@
                                             <td>
                                                 <a href="{{ route('riwayat.show', $order->id) }}"
                                                     class="btn btn-info btn-sm" data-bs-toggle="tooltip" title="Detail">
-                                                    <i class="fas fa-eye"></i> 
+                                                    <i class="fas fa-eye"></i>
                                                 </a>
                                                 {{-- @if ($statusPembayaran === 'Menunggu Pembayaran')
                                                     <a href="{{ route('pembayaran.create', ['order_id' => $order->id]) }}"

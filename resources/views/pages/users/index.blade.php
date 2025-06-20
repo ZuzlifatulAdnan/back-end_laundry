@@ -24,40 +24,41 @@
                                     <h4>Data Users</h4>
                                 </div>
                                 <div class="card-body">
+                                    {{-- Filter & Tambah --}}
                                     <div class="mb-3">
                                         <div class="row align-items-end">
                                             <div class="col-md-2 mb-2">
-                                                <a href="{{ route('user.create') }}" class="btn btn-primary">Tambah</a>
+                                                <a href="{{ route('user.create') }}" class="btn btn-primary w-100">
+                                                    <i class="fas fa-plus"></i> Tambah
+                                                </a>
                                             </div>
-                                        </div>
-                                        <div class="col-md-10">
-                                            <form action="{{ route('user.index') }}" method="GET">
-                                                <div class="form-row row">
-                                                    <div class="col-md-3 mb-2">
-                                                        <select name="role" class="form-control"
-                                                            onchange="this.form.submit()">
-                                                            <option value=""
-                                                                {{ request('role') == '' ? 'selected' : '' }}>Semua Role
-                                                            </option>
-                                                            <option value="Admin"
-                                                                {{ request('role') == 'Admin' ? 'selected' : '' }}>Admin
-                                                            </option>
-                                                            <option value="Customer"
-                                                                {{ request('role') == 'Customer' ? 'selected' : '' }}>
-                                                                Customer</option>
-                                                        </select>
+                                            <div class="col-md-10">
+                                                <form action="{{ route('user.index') }}" method="GET">
+                                                    <div class="form-row row">
+                                                        <div class="col-md-2 mb-2">
+                                                            <select name="role" class="form-control"
+                                                                onchange="this.form.submit()">
+                                                                <option value="">Semua Role</option>
+                                                                <option value="Admin"
+                                                                    {{ request('role') == 'Admin' ? 'selected' : '' }}>
+                                                                    Admin</option>
+                                                                <option value="Customer"
+                                                                    {{ request('role') == 'Customer' ? 'selected' : '' }}>
+                                                                    Customer</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-3 mb-2">
+                                                            <input type="text" name="name" class="form-control"
+                                                                placeholder="Cari Nama User" value="{{ request('name') }}">
+                                                        </div>
+                                                        <div class="col-md-1 mb-2">
+                                                            <button class="btn btn-primary w-100" type="submit">
+                                                                <i class="fas fa-search"></i>
+                                                            </button>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-md-4 mb-2">
-                                                        <input type="text" class="form-control" placeholder="Search"
-                                                            name="name" value="{{ request('name') }}">
-                                                    </div>
-                                                    <div class="col-md-2 mb-2">
-                                                        <button class="btn btn-primary w-100" type="submit">
-                                                            <i class="fas fa-search"></i> Cari
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </form>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
 
