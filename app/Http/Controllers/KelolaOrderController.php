@@ -199,9 +199,9 @@ class KelolaOrderController extends Controller
         $deadline = Carbon::parse($order->tanggal_order . ' ' . $order->jam_order)->addMinutes(15);
 
         if (now()->greaterThan($deadline) && $order->status === 'Diterima') {
-            $order->status = 'Tunda';
+            $order->status = 'Ditunda';
             $order->save();
-            return response()->json(['status' => 'tunda']);
+            return response()->json(['status' => 'Ditunda']);
         }
 
         return response()->json(['status' => 'masih berlaku'], 200);

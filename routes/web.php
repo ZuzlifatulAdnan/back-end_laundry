@@ -22,12 +22,13 @@ Route::middleware(['auth'])->group(function () {
   Route::get('/kelolaOrder/proses', [KelolaOrderController::class, 'showProses'])->name('kelolaOrder.proses');
   Route::put('/kelolaOrder/update-status/{id}', [KelolaOrderController::class, 'updateStatus'])->name('kelolaOrder.updateStatus');
   Route::get('/kelolaOrder/diterima', [KelolaOrderController::class, 'showDiterima'])->name('kelolaOrder.diterima');
-  // Route::put('/kelolaOrder/update-status/{id}', [KelolaOrderController::class, 'updateStatus'])->name('kelolaOrder.updateStatus');
   Route::put('/kelolaOrder/auto-batal/{id}', [KelolaOrderController::class, 'autoBatal']);
-
   Route::resource('kelolaOrder', KelolaOrderController::class);
 
-  // kolal pembayran
+  // kelola pembayran
+   Route::get('/kelolaPembayaran/proses', [KelolaPembayaranController::class, 'showProses'])->name('kelolaPembayaran.proses');
+  Route::put('/kelolaPembayaran/update-status/{id}', [KelolaPembayaranController::class, 'updateStatus'])->name('kelolaPembayaran.updateStatus');
+  Route::get('/kelolaPembayaran/diterima', [KelolaPembayaranController::class, 'showDiterima'])->name('kelolaPembayaran.diterima');
   Route::resource('kelolaPembayaran', KelolaPembayaranController::class);
 
   // mesin

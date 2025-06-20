@@ -40,19 +40,16 @@
             </li>
 
             {{-- Kelola Pembayaran --}}
-            <li class="nav-item dropdown {{ $type_menu === 'pembayaran' ? 'active' : '' }}">
+            <li class="nav-item dropdown {{ $type_menu === 'kelolaPembayaran' ? 'active' : '' }}">
                 <a href="#" class="nav-link has-dropdown">
                     <i class="fas fa-wallet"></i><span>Kelola Pembayaran</span>
                 </a>
                 <ul class="dropdown-menu">
                     <li class="{{ request()->is('kelolaPembayaran') ? 'active' : '' }}">
-                        <a class="nav-link" href="">Data Pembayaran</a>
-                    </li>
-                    <li class="{{ request()->is('kelolaPembayaran/terima') ? 'active' : '' }}">
-                        <a class="nav-link" href="">Pembayaran Diterima</a>
+                        <a class="nav-link" href="{{ route('kelolaPembayaran.index') }}">Data Pembayaran</a>
                     </li>
                     <li class="{{ request()->is('kelolaPembayaran/proses') ? 'active' : '' }}">
-                        <a class="nav-link" href="">Pembayaran Diproses</a>
+                        <a class="nav-link" href="{{ route('kelolaPembayaran.proses') }}">Pembayaran Diproses</a>
                     </li>
                 </ul>
             </li>
