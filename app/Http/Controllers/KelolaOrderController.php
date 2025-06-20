@@ -128,7 +128,7 @@ class KelolaOrderController extends Controller
             'detergent' => 'nullable|numeric', // Fix typo
             'catatan' => 'nullable|string',
             'tanggal_ambil' => 'nullable|date',
-            'status' => 'required|in:Diproses,Diterima,Ditolak,Dibatalkan,Selesai',
+            'status' => 'required|in:Diproses,Diterima,Ditolak,Dibatalkan,Selesai,Ditunda',
             'total_biaya' => 'required|numeric',
         ]);
 

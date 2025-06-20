@@ -125,6 +125,8 @@
                                             Dibatalkan</option>
                                         <option value="Ditunda" {{ old('status') == 'Ditunda' ? 'selected' : '' }}>
                                             Ditunda</option>
+                                        <option value="Ditunda" {{ old('status') == 'Ditunda' ? 'selected' : '' }}>
+                                            Ditunda</option>
                                         <option value="Selesai" {{ old('status') == 'Selesai' ? 'selected' : '' }}>
                                             Selesai</option>
                                     </select>

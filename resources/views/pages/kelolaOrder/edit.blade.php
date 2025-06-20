@@ -126,6 +126,8 @@
                                         </option>
                                         <option value="Dibatalkan" {{ $order->status == 'Dibatalkan' ? 'selected' : '' }}>
                                             Dibatalkan</option>
+                                        <option value="Ditunda" {{ $order->status == 'Ditunda' ? 'selected' : '' }}>
+                                            Ditunda</option>
                                         <option value="Selesai" {{ $order->status == 'Selesai' ? 'selected' : '' }}>Selesai
                                         </option>
                                     </select>
