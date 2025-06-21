@@ -24,9 +24,12 @@ class KelolaOrderController extends Controller
 
         // Query orders dengan filter yang diterapkan
         $orders = order::with('user')
-            ->when($keyword, function ($query, $keyword) {
-                $query->whereHas('user', function ($q) use ($keyword) {
-                    $q->where('name', 'like', '%' . $keyword . '%');
+            ->when($keyword, function ($query) use ($keyword) {
+                $query->where(function ($q) use ($keyword) {
+                    $q->whereHas('user', function ($q2) use ($keyword) {
+                        $q2->where('name', 'like', '%' . $keyword . '%');
+                    })
+                        ->orWhere('no_order', 'like', '%' . $keyword . '%');
                 });
             })
             ->when($status, function ($query, $status) {
@@ -81,7 +84,13 @@ class KelolaOrderController extends Controller
             'status' => 'required|string',
             'total_biaya' => 'required|numeric',
         ]);
+
+        $tanggal = date('Ymd');
+        $jumlahOrderHariIni = Order::whereDate('created_at', now()->toDateString())->count() + 1;
+        $no_order = 'ORD-' . $tanggal . '-' . str_pad($jumlahOrderHariIni, 3, '0', STR_PAD_LEFT);
+
         Order::create([
+            'no_order' => $no_order,
             'user_id' => $request->user_id,
             'service_type' => $request->service_type,
             'mesin_id' => $request->mesin_id,

@@ -19,8 +19,10 @@ class KelolaPembayaranController extends Controller
 
         $pembayarans = Pembayaran::with(['order.user'])
             ->when($keyword, function ($query, $keyword) {
-                $query->whereHas('order.user', function ($q) use ($keyword) {
-                    $q->where('name', 'like', '%' . $keyword . '%');
+                $query->where(function ($q) use ($keyword) {
+                    $q->whereHas('order.user', function ($q2) use ($keyword) {
+                        $q2->where('name', 'like', '%' . $keyword . '%');
+                    })->orWhere('no_pembayaran', 'like', '%' . $keyword . '%');
                 });
             })
             ->when($status, function ($query, $status) {
@@ -69,8 +71,14 @@ class KelolaPembayaranController extends Controller
             $imagePath = uniqid() . '.' . $image->getClientOriginalExtension();
             $image->move('img/bukti_bayar/', $imagePath);
         }
+        // Buat no_pembayaran
+        $tanggal = date('Ymd');
+        $jumlahPembayaranHariIni = Pembayaran::whereDate('created_at', now()->toDateString())->count() + 1;
+        $no_pembayaran = 'PAY-' . $tanggal . '-' . str_pad($jumlahPembayaranHariIni, 3, '0', STR_PAD_LEFT);
+
         //masukan data kedalam tabel users
         pembayaran::create([
+            'no_pembayaran' => $no_pembayaran,
             'order_id' => $validatedData['order_id'],
             'metode_pembayaran' => $validatedData['metode_pembayaran'],
             'jumlah_dibayar' => $validatedData['jumlah_dibayar'],

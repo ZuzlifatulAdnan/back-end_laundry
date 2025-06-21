@@ -138,6 +138,9 @@
             </section>
         </div>
     @else
+        <div class="alert alert-danger">
+            User role Anda tidak mendapatkan izin.
+        </div>
     @endif
 
 @endsection

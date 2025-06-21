@@ -34,7 +34,7 @@
 @endpush
 
 @section('main')
-    {{-- @if (Auth::user()->role == 'Admin') --}}
+    @if (Auth::user()->role == 'Admin')
         <div class="main-content">
             <section class="section">
                 <div class="section-body">
@@ -93,7 +93,10 @@
                 </div>
             </section>
         </div>
-    {{-- @else
-    @endif --}}
+    @else
+        <div class="alert alert-danger">
+            User role Anda tidak mendapatkan izin.
+        </div>
+    @endif
 
 @endsection

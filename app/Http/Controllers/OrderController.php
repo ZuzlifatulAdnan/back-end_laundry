@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Redirect;
 
 class OrderController extends Controller
 {
-    // 🔹 Tampilkan form untuk Self Service
     public function selfservice()
     {
         $type_menu = 'order';
@@ -32,8 +31,13 @@ class OrderController extends Controller
             'catatan' => 'nullable|string',
             'total_biaya' => 'required|integer|min:0',
         ]);
+        // Buat no_order
+        $tanggal = date('Ymd');
+        $jumlahOrderHariIni = Order::whereDate('created_at', now()->toDateString())->count() + 1;
+        $no_order = 'ORD-' . $tanggal . '-' . str_pad($jumlahOrderHariIni, 3, '0', STR_PAD_LEFT);
 
         $order = Order::create([
+            'no_order' => $no_order,
             'user_id' => Auth::id(),
             'service_type' => 'SelfService',
             'mesin_id' => $request->mesin_id,
@@ -45,8 +49,14 @@ class OrderController extends Controller
             'status' => 'Diproses',
             'total_biaya' => $request->total_biaya,
         ]);
+
+        // Buat no_pembayaran
+        $jumlahPembayaranHariIni = Pembayaran::whereDate('created_at', now()->toDateString())->count() + 1;
+        $no_pembayaran = 'PAY-' . $tanggal . '-' . str_pad($jumlahPembayaranHariIni, 3, '0', STR_PAD_LEFT);
+
         // Buat data pembayaran awal
         $pembayaran = Pembayaran::create([
+            'no_pembayaran' => $no_pembayaran,
             'order_id' => $order->id,
             'metode_pembayaran' => 'Belum dipilih',
             'jumlah_dibayar' => $order->total_biaya,
@@ -76,7 +86,12 @@ class OrderController extends Controller
             'total_biaya' => 'required|integer|min:0',
         ]);
 
+        $tanggal = date('Ymd');
+        $jumlahOrderHariIni = Order::whereDate('created_at', now()->toDateString())->count() + 1;
+        $no_order = 'ORD-' . $tanggal . '-' . str_pad($jumlahOrderHariIni, 3, '0', STR_PAD_LEFT);
+
         $order = Order::create([
+            'no_order' => $no_order,
             'user_id' => Auth::id(),
             'service_type' => 'DropOff',
             'tanggal_order' => $request->tanggal_order,
@@ -88,8 +103,14 @@ class OrderController extends Controller
             'status' => 'Diproses',
             'total_biaya' => $request->total_biaya,
         ]);
+
+        // Buat no_pembayaran
+        $jumlahPembayaranHariIni = Pembayaran::whereDate('created_at', now()->toDateString())->count() + 1;
+        $no_pembayaran = 'PAY-' . $tanggal . '-' . str_pad($jumlahPembayaranHariIni, 3, '0', STR_PAD_LEFT);
+
         // Buat data pembayaran awal
         $pembayaran = Pembayaran::create([
+            'no_pembayaran' => $no_pembayaran,
             'order_id' => $order->id,
             'metode_pembayaran' => 'Belum dipilih',
             'jumlah_dibayar' => $order->total_biaya,

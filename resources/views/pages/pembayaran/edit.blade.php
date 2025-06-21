@@ -4,6 +4,7 @@
 
 @section('main')
 <div class="main-content">
+    @if (Auth::user()->role == 'Customer')
     <section class="section">
         <div class="section-header">
             <h1>Edit Pembayaran untuk Order {{ $pembayaran->order->user->name }}</h1>
@@ -81,6 +82,11 @@
             </form>
         </div>
     </section>
+    @else
+        <div class="alert alert-danger">
+            User role Anda tidak mendapatkan izin.
+        </div>
+    @endif
 </div>
 @endsection
 

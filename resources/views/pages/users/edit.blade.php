@@ -96,7 +96,8 @@
                                                         {{ old('role', $user->role) == 'Admin' ? 'selected' : '' }}>Admin
                                                     </option>
                                                     <option value="PLPP"
-                                                        {{ old('role', $user->role) == 'Customer' ? 'selected' : '' }}>Customer
+                                                        {{ old('role', $user->role) == 'Customer' ? 'selected' : '' }}>
+                                                        Customer
                                                     </option>
                                                 </select>
                                                 @error('role')
@@ -149,6 +150,9 @@
             </section>
         </div>
     @else
+        <div class="alert alert-danger">
+            User role Anda tidak mendapatkan izin.
+        </div>
     @endif
 
 @endsection

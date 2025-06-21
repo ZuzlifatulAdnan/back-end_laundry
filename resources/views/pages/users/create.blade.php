@@ -113,7 +113,7 @@
                                                 <label for="image" class="form-label">Image</label>
                                                 <input type="file"
                                                     class="form-control @error('image') is-invalid @enderror" id="image"
-                                                    name="image" accept="image/*" >
+                                                    name="image" accept="image/*">
                                                 @error('image')
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
@@ -134,6 +134,9 @@
             </section>
         </div>
     @else
+        <div class="alert alert-danger">
+            User role Anda tidak mendapatkan izin.
+        </div>
     @endif
 
 @endsection
