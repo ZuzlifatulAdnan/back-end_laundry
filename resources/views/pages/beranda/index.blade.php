@@ -73,21 +73,21 @@
                         </ol>
                         <div class="carousel-inner rounded">
                             <div class="carousel-item active">
-                                <img src="{{ asset('img/customer1.jpg') }}" class="d-block w-100" alt="Slide 1">
+                                <img src="{{ asset('img/beranda/customer1.jpg') }}" class="d-block w-100" alt="Slide 1">
                                 <div class="carousel-caption d-none d-md-block">
                                     <h5>Selamat Datang di Clean Wash</h5>
                                     <p>Laundry cepat, bersih, dan profesional.</p>
                                 </div>
                             </div>
                             <div class="carousel-item">
-                                <img src="{{ asset('img/customer2.jpg') }}" class="d-block w-100" alt="Slide 2">
+                                <img src="{{ asset('img/beranda/customer1.jpg') }}" class="d-block w-100" alt="Slide 2">
                                 <div class="carousel-caption d-none d-md-block">
                                     <h5>Pesan Self Service</h5>
                                     <p>Pilih mesin sesuai kebutuhan Anda kapan saja.</p>
                                 </div>
                             </div>
                             <div class="carousel-item">
-                                <img src="{{ asset('img/customer3.jpg') }}" class="d-block w-100" alt="Slide 3">
+                                <img src="{{ asset('img/beranda/customer1.jpg') }}" class="d-block w-100" alt="Slide 3">
                                 <div class="carousel-caption d-none d-md-block">
                                     <h5>Antar Jemput Tersedia</h5>
                                     <p>Hemat waktu dengan layanan antar jemput.</p>
