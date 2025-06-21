@@ -85,7 +85,7 @@
                                                                             <option value="">-- Pilih Status --
                                                                             </option>
                                                                             <option value="Diterima">Diterima</option>
-                                                                            <option value="Ditolak">Ditola</option>
+                                                                            <option value="Ditolak">Ditolak</option>
                                                                         </select>
                                                                     </div>
                                                                 </div>

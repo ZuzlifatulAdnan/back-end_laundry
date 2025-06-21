@@ -58,10 +58,6 @@
                             </div>
                         </div>
                     </div>
-                @else
-                    <div class="alert alert-danger">
-                        User role Anda tidak mendapatkan izin.
-                    </div>
                 @endif
                 @if (Auth::user()->role == 'Admin' || Auth::user()->role == 'Customer')
                     {{-- 🔹 Carousel --}}

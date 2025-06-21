@@ -80,7 +80,7 @@ class UserController extends Controller
         ]);
 
         //jika proses berhsil arahkan kembali ke halaman users dengan status success
-        return Redirect::route('user.index')->with('success', 'User berhasil di tambah.');
+        return Redirect::route('user.index')->with('success', 'User ' . $validatedData['name'] . ' berhasil ditambah.');
     }
 
     /**
@@ -132,7 +132,7 @@ class UserController extends Controller
             ]);
         }
 
-        return Redirect::route('user.index')->with('success', 'User berhasil di ubah.');
+        return Redirect::route('user.index')->with('success', 'User ' . $user->name . ' berhasil diubah.');
     }
 
     /**
@@ -140,8 +140,12 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        // Hapus bukti bayar jika ada
+        if ($user->image && file_exists(public_path('img/user/' . $user->image))) {
+            unlink(public_path('img/user/' . $user->image));
+        }
         $user->delete();
-        return Redirect::route('user.index')->with('success', 'User berhasil di hapus.');
+        return Redirect::route('user.index')->with('success', 'User '. $user->name . ' berhasil di hapus.');
     }
     public function show($id)
     {

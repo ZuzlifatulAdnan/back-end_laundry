@@ -77,7 +77,7 @@ class KelolaPembayaranController extends Controller
         $no_pembayaran = 'PAY-' . $tanggal . '-' . str_pad($jumlahPembayaranHariIni, 3, '0', STR_PAD_LEFT);
 
         //masukan data kedalam tabel users
-        pembayaran::create([
+        $pembayaran = pembayaran::create([
             'no_pembayaran' => $no_pembayaran,
             'order_id' => $validatedData['order_id'],
             'metode_pembayaran' => $validatedData['metode_pembayaran'],
@@ -85,7 +85,7 @@ class KelolaPembayaranController extends Controller
             'bukti_bayar' => $imagePath,
             'status' => 'Proses Pembayaran'
         ]);
-        return redirect()->route('kelolaPembayaran.index')->with('success', 'Pembayaran berhasil ditambahkan.');
+        return redirect()->route('kelolaPembayaran.index')->with('success', 'Pembayaran dengan No Pembayaran '.$pembayaran->no_pembayaran .' berhasil ditambahkan.');
     }
 
     public function edit(pembayaran $kelolaPembayaran)
@@ -127,7 +127,7 @@ class KelolaPembayaranController extends Controller
         }
 
         // Redirect kembali ke halaman index dengan pesan sukses
-        return redirect()->route('kelolaPembayaran.index')->with('success', 'Pembayaran berhasil diperbarui.');
+        return redirect()->route('kelolaPembayaran.index')->with('success', 'Pembayaran dengan No Pembayaran '. $kelolaPembayaran->no_pembayaran .' berhasil diperbarui.');
     }
 
 
@@ -144,7 +144,7 @@ class KelolaPembayaranController extends Controller
         }
         // Hapus data pembayaran
         $kelolaPembayaran->delete();
-        return redirect()->route('kelolaPembayaran.index')->with('success', 'Pembayaran berhasil dihapus.');
+        return redirect()->route('kelolaPembayaran.index')->with('success', 'Pembayaran dengan No Pembayaran '.$kelolaPembayaran->no_pembayaran.' berhasil dihapus.');
     }
     // Menampilkan pembayaran yang sedang diproses
     public function showProses()
@@ -178,6 +178,6 @@ class KelolaPembayaranController extends Controller
             $pembayaran->order->save();
         }
 
-        return redirect()->back()->with('success', 'Status pembayaran berhasil diperbarui.');
+        return redirect()->back()->with('success', 'Status pembayaran dengan No Pembayaran '. $pembayaran->no_pembayaran.' berhasil diperbarui.');
     }
 }

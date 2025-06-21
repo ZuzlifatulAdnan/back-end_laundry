@@ -63,7 +63,7 @@ class OrderController extends Controller
             'status' => 'Menunggu Pembayaran',
         ]);
         return redirect()->route('pembayaran.edit', $pembayaran->id)
-            ->with('success', 'Order Self Service berhasil dibuat. Silakan lengkapi pembayaran Anda.');
+            ->with('success', 'Order Self Service dengan No Order'.$order->no_order.'berhasil dibuat. Silakan lengkapi pembayaran Anda.');
     }
 
     // 🔹 Tampilkan form untuk Drop Off
@@ -117,6 +117,6 @@ class OrderController extends Controller
             'status' => 'Menunggu Pembayaran',
         ]);
         return redirect()->route('pembayaran.edit', $pembayaran->id)
-            ->with('success', 'Order Self Service berhasil dibuat. Silakan lengkapi pembayaran Anda.');
+            ->with('success', 'Order DropOff dengan No Order'.$order->no_order.'berhasil dibuat. Silakan lengkapi pembayaran Anda.');
     }
 }

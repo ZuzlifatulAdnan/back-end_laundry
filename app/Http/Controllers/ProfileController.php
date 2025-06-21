@@ -56,7 +56,7 @@ class ProfileController extends Controller
             ]);
         }
 
-        return redirect()->route('profile.index')->with('success', 'Data Akun berhasil diperbarui.');
+        return redirect()->route('profile.index')->with('success', 'Data Akun '.$user->name . ' berhasil diperbarui.');
     }
     public function changePasswordForm()
     {
@@ -80,6 +80,6 @@ class ProfileController extends Controller
             'password' => Hash::make($request->new_password),
         ]);
 
-        return redirect()->route('profile.index')->with('success', 'password berhasil diperbarui.');
+        return redirect()->route('profile.index')->with('success', 'password Akun '.$user->name.' berhasil diperbarui.');
     }
 }

@@ -54,14 +54,14 @@ class MesinController extends Controller
             'status'=> 'required|string',
         ]);
 
-        mesin::create([
+        $mesin = mesin::create([
             'nama' => $request->nama,
             'type'=> $request->type,
             'status'=> $request->status,
         ]);
 
         //jika proses berhsil arahkan kembali ke halaman users dengan status success
-        return Redirect::route('mesin.index')->with('success', 'mesin berhasil di tambah.');
+        return Redirect::route('mesin.index')->with('success', 'Mesin '.$mesin->nama .' berhasil di tambah.');
     }
 
     /**
@@ -92,7 +92,7 @@ class MesinController extends Controller
             'status'=> $request->status,
         ]);
 
-        return Redirect::route('mesin.index')->with('success', 'mesin berhasil di ubah.');
+        return Redirect::route('mesin.index')->with('success', 'Mesin '.$mesin->nama .' berhasil di ubah.');
     }
 
     /**
@@ -101,6 +101,6 @@ class MesinController extends Controller
     public function destroy(mesin $mesin)
     {
         $mesin->delete();
-        return Redirect::route('mesin.index')->with('success', 'mesin berhasil di hapus.');
+        return Redirect::route('mesin.index')->with('success', 'Mesin '.$mesin->nama .' berhasil di hapus.');
     }
 }

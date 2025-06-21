@@ -123,6 +123,7 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
+                                            <th>No Order</th>
                                             <th>Service</th>
                                             <th>Tanggal Order</th>
                                             <th>Jam</th>
@@ -136,6 +137,7 @@
                                         @forelse ($orders as $index => $order)
                                             <tr>
                                                 <td>{{ $orders->firstItem() + $index }}</td>
+                                                <td>{{ ucfirst($order->no_order) }}</td>
                                                 <td>{{ ucfirst($order->service_type) }}</td>
                                                 <td>{{ \Carbon\Carbon::parse($order->tanggal_order)->format('d/m/Y') }}
                                                 </td>

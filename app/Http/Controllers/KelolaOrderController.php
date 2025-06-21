@@ -89,7 +89,7 @@ class KelolaOrderController extends Controller
         $jumlahOrderHariIni = Order::whereDate('created_at', now()->toDateString())->count() + 1;
         $no_order = 'ORD-' . $tanggal . '-' . str_pad($jumlahOrderHariIni, 3, '0', STR_PAD_LEFT);
 
-        Order::create([
+        $order = Order::create([
             'no_order' => $no_order,
             'user_id' => $request->user_id,
             'service_type' => $request->service_type,
@@ -106,7 +106,7 @@ class KelolaOrderController extends Controller
             'total_biaya' => $request->total_biaya,
         ]);
 
-        return redirect()->route('kelolaOrder.index')->with('success', 'Order berhasil ditambahkan.');
+        return redirect()->route('kelolaOrder.index')->with('success', 'Order dengan No Order '.$order->no_order.' berhasil ditambahkan.');
     }
 
     public function edit(Order $kelolaOrder) // ubah dari $order
@@ -159,7 +159,7 @@ class KelolaOrderController extends Controller
         ]);
 
         // Redirect kembali ke halaman index dengan pesan sukses
-        return redirect()->route('kelolaOrder.index')->with('success', 'Order berhasil diperbarui.');
+        return redirect()->route('kelolaOrder.index')->with('success', 'Order dengan No order '. $kelolaOrder->no_order.' berhasil diperbarui.');
     }
 
 
@@ -171,7 +171,7 @@ class KelolaOrderController extends Controller
     public function destroy(Order $kelolaOrder)
     {
         $kelolaOrder->delete();
-        return redirect()->route('kelolaOrder.index')->with('success', 'Order berhasil dihapus.');
+        return redirect()->route('kelolaOrder.index')->with('success', 'Order dengan No Order '.$kelolaOrder->no_order.' berhasil dihapus.');
     }
     // ✅ Menampilkan order yang statusnya "Diproses"
     public function showProses()
@@ -192,7 +192,7 @@ class KelolaOrderController extends Controller
         $order->status = $request->status;
         $order->save();
 
-        return redirect()->back()->with('success', 'Status order berhasil diperbarui.');
+        return redirect()->back()->with('success', 'Status order dengan No Order '.$order->no_order.' berhasil diperbarui.');
     }
     public function showDiterima()
     {
