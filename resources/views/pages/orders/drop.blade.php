@@ -77,7 +77,9 @@
         function hitungTotal() {
             const berat = parseFloat(document.getElementById('berat')?.value) || 0;
             const detergent = parseInt(document.getElementById('detergent')?.value) || 0;
-            const total = (berat * 31000) + (detergent * 1000);
+            const beratCost = (berat > 0) ? (berat / 7) * 31000 : 0;
+            const total = beratCost + (detergent * 1000);
+
             document.getElementById('total_biaya_display').value = formatRupiah(total);
             document.getElementById('total_biaya').value = total;
         }

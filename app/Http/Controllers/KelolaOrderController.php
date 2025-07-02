@@ -7,6 +7,7 @@ use App\Models\order;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 
 class KelolaOrderController extends Controller
@@ -63,7 +64,7 @@ class KelolaOrderController extends Controller
     {
         $type_menu = 'kelolaOrder';
         $users = User::all();
-        $mesins = mesin::all();
+        $mesins = Mesin::select('id', 'nama', 'type', 'durasi')->get();
         return view('pages.kelolaOrder.create', compact('type_menu', 'users', 'mesins'));
     }
 
@@ -106,7 +107,7 @@ class KelolaOrderController extends Controller
             'total_biaya' => $request->total_biaya,
         ]);
 
-        return redirect()->route('kelolaOrder.index')->with('success', 'Order dengan No Order '.$order->no_order.' berhasil ditambahkan.');
+        return redirect()->route('kelolaOrder.index')->with('success', 'Order dengan No Order ' . $order->no_order . ' berhasil ditambahkan.');
     }
 
     public function edit(Order $kelolaOrder) // ubah dari $order
@@ -159,7 +160,7 @@ class KelolaOrderController extends Controller
         ]);
 
         // Redirect kembali ke halaman index dengan pesan sukses
-        return redirect()->route('kelolaOrder.index')->with('success', 'Order dengan No order '. $kelolaOrder->no_order.' berhasil diperbarui.');
+        return redirect()->route('kelolaOrder.index')->with('success', 'Order dengan No order ' . $kelolaOrder->no_order . ' berhasil diperbarui.');
     }
 
 
@@ -171,7 +172,7 @@ class KelolaOrderController extends Controller
     public function destroy(Order $kelolaOrder)
     {
         $kelolaOrder->delete();
-        return redirect()->route('kelolaOrder.index')->with('success', 'Order dengan No Order '.$kelolaOrder->no_order.' berhasil dihapus.');
+        return redirect()->route('kelolaOrder.index')->with('success', 'Order dengan No Order ' . $kelolaOrder->no_order . ' berhasil dihapus.');
     }
     // ✅ Menampilkan order yang statusnya "Diproses"
     public function showProses()
@@ -185,14 +186,21 @@ class KelolaOrderController extends Controller
     public function updateStatus(Request $request, $id)
     {
         $request->validate([
-            'status' => 'required|in:Diterima,Dibatalkan, Selesai, Ditunda',
+            'status' => ['required', 'in:Diproses,Diterima,Ditolak,Dibatalkan,Selesai,Ditunda'],
+            'status_pembayaran' => ['nullable', 'in:Menunggu Pembayaran,Proses Pembayaran,Pembayaran Berhasil'],
         ]);
 
-        $order = Order::findOrFail($id);
+        $order = Order::with('pembayaran')->findOrFail($id);
+
         $order->status = $request->status;
         $order->save();
 
-        return redirect()->back()->with('success', 'Status order dengan No Order '.$order->no_order.' berhasil diperbarui.');
+        if ($order->pembayaran) {
+            $order->pembayaran->status = $request->status_pembayaran;
+            $order->pembayaran->save();
+        }
+
+        return redirect()->back()->with('success', 'Status order ' . $order->no_order . ' berhasil diperbarui.');
     }
     public function showDiterima()
     {

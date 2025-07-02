@@ -86,6 +86,7 @@
                                                 <th style="width: 3%">No</th>
                                                 <th>Nama</th>
                                                 <th>Type</th>
+                                                <th>Durasi(Menit)</th>
                                                 <th>Status</th>
                                                 <th style="width: 5%" class="text-center">Action</th>
                                             </tr>
@@ -99,6 +100,9 @@
                                                     </td>
                                                     <td>
                                                         {{ $mesin->type }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $mesin->durasi }}
                                                     </td>
                                                     <td>
                                                         {{ $mesin->status }}

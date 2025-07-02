@@ -19,6 +19,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="row">
+
                                     {{-- USER --}}
                                     <div class="form-group col-md-6">
                                         <label for="user_id">User</label>
@@ -41,7 +42,7 @@
                                             @foreach ($mesins as $mesin)
                                                 <option value="{{ $mesin->id }}"
                                                     {{ old('mesin_id') == $mesin->id ? 'selected' : '' }}>
-                                                    {{ $mesin->nama }}
+                                                    {{ $mesin->nama }} - {{ $mesin->type }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -52,54 +53,44 @@
                                         <label for="service_type">Tipe Layanan</label>
                                         <select name="service_type" id="service_type" class="form-control">
                                             <option value=""> -- Pilih Tipe Layanan -- </option>
-                                            <option value="Self Service"
-                                                {{ old('service_type') == 'Self Service' ? 'selected' : '' }}>Self Service
-                                            </option>
-                                            <option value="Drop Off"
-                                                {{ old('service_type') == 'Drop Off' ? 'selected' : '' }}>
-                                                Drop Off</option>
+                                            <option value="Self Service" {{ old('service_type') == 'Self Service' ? 'selected' : '' }}>Self Service</option>
+                                            <option value="Drop Off" {{ old('service_type') == 'Drop Off' ? 'selected' : '' }}>Drop Off</option>
                                         </select>
                                     </div>
 
                                     {{-- TANGGAL & JAM --}}
                                     <div class="form-group col-md-3">
                                         <label for="tanggal_order">Tanggal Order</label>
-                                        <input type="date" class="form-control" name="tanggal_order"
-                                            value="{{ old('tanggal_order') }}">
+                                        <input type="date" class="form-control" name="tanggal_order" value="{{ old('tanggal_order') }}">
                                     </div>
 
                                     <div class="form-group col-md-3">
                                         <label for="jam_order">Jam Order</label>
-                                        <input type="time" class="form-control" name="jam_order"
-                                            value="{{ old('jam_order') }}">
+                                        <input type="time" class="form-control" name="jam_order" value="{{ old('jam_order') }}">
                                     </div>
 
                                     {{-- DURASI --}}
                                     <div class="form-group col-md-3">
                                         <label for="durasi">Durasi (menit)</label>
-                                        <input type="number" class="form-control" name="durasi"
-                                            value="{{ old('durasi') }}">
+                                        <input type="number" class="form-control" name="durasi" id="durasi" value="{{ old('durasi') }}" readonly>
                                     </div>
 
                                     {{-- KOIN --}}
                                     <div class="form-group col-md-3">
                                         <label for="koin">Jumlah Koin</label>
-                                        <input type="number" id="koin" class="form-control" name="koin"
-                                            value="{{ old('koin') }}">
+                                        <input type="number" id="koin" class="form-control" name="koin" value="{{ old('koin') }}">
                                     </div>
 
                                     {{-- BERAT --}}
                                     <div class="form-group col-md-3">
                                         <label for="berat">Berat (kg)</label>
-                                        <input type="number" step="0.1" id="berat" class="form-control"
-                                            name="berat" value="{{ old('berat') }}">
+                                        <input type="number" step="0.1" id="berat" class="form-control" name="berat" value="{{ old('berat') }}">
                                     </div>
 
                                     {{-- DETERGENT --}}
                                     <div class="form-group col-md-3">
                                         <label for="detergent">Jumlah Detergen</label>
-                                        <input type="number" id="detergent" class="form-control" name="detergent"
-                                            value="{{ old('detergent') }}">
+                                        <input type="number" id="detergent" class="form-control" name="detergent" value="{{ old('detergent') }}">
                                     </div>
 
                                     {{-- CATATAN --}}
@@ -111,8 +102,7 @@
                                     {{-- TOTAL BIAYA --}}
                                     <div class="form-group col-md-3">
                                         <label for="total_biaya">Total Biaya</label>
-                                        <input type="number" id="total_biaya" name="total_biaya" class="form-control"
-                                            readonly value="{{ old('total_biaya') }}">
+                                        <input type="number" id="total_biaya" name="total_biaya" class="form-control" readonly value="{{ old('total_biaya') }}">
                                     </div>
 
                                     {{-- STATUS --}}
@@ -120,19 +110,11 @@
                                         <label for="status">Status</label>
                                         <select name="status" class="form-control">
                                             <option value=""> -- Pilih Status -- </option>
-                                            <option value="Diterima" {{ old('status') == 'Diterima' ? 'selected' : '' }}>
-                                                Diterima </option>
-                                            <option value="Diproses" {{ old('status') == 'Diproses' ? 'selected' : '' }}>
-                                                Diproses</option>
-                                            <option value="Dibatalkan"
-                                                {{ old('status') == 'Dibatalkan' ? 'selected' : '' }}>
-                                                Dibatalkan</option>
-                                            <option value="Ditunda" {{ old('status') == 'Ditunda' ? 'selected' : '' }}>
-                                                Ditunda</option>
-                                            <option value="Ditunda" {{ old('status') == 'Ditunda' ? 'selected' : '' }}>
-                                                Ditunda</option>
-                                            <option value="Selesai" {{ old('status') == 'Selesai' ? 'selected' : '' }}>
-                                                Selesai</option>
+                                            <option value="Diterima" {{ old('status') == 'Diterima' ? 'selected' : '' }}>Diterima</option>
+                                            <option value="Diproses" {{ old('status') == 'Diproses' ? 'selected' : '' }}>Diproses</option>
+                                            <option value="Dibatalkan" {{ old('status') == 'Dibatalkan' ? 'selected' : '' }}>Dibatalkan</option>
+                                            <option value="Ditunda" {{ old('status') == 'Ditunda' ? 'selected' : '' }}>Ditunda</option>
+                                            <option value="Selesai" {{ old('status') == 'Selesai' ? 'selected' : '' }}>Selesai</option>
                                         </select>
                                     </div>
 
@@ -146,9 +128,7 @@
                 </div>
             </section>
         @else
-            <div class="alert alert-danger">
-                User role Anda tidak mendapatkan izin.
-            </div>
+            <div class="alert alert-danger">User role Anda tidak mendapatkan izin.</div>
         @endif
     </div>
 @endsection
@@ -156,19 +136,40 @@
 @push('scripts')
     <script src="{{ asset('library/select2/dist/js/select2.full.min.js') }}"></script>
     <script>
-        $('.select2').select2();
+        $(document).ready(function () {
+            $('.select2').select2();
 
-        function hitungTotal() {
-            const koin = parseInt(document.getElementById('koin')?.value) || 0;
-            const berat = parseFloat(document.getElementById('berat')?.value) || 0;
-            const detergent = parseInt(document.getElementById('detergent')?.value) || 0;
+            // Ambil durasi dari mesin
+            const mesinDurasiMap = @json($mesins->pluck('durasi', 'id')->toArray());
+            const mesinSelect = document.getElementById('mesin_id');
+            const durasiInput = document.getElementById('durasi');
 
-            const total = (koin * 12000) + (berat * 32000) + (detergent * 1000);
+            function isiDurasiDanHitungTotal() {
+                const selectedId = mesinSelect.value;
+                durasiInput.value = mesinDurasiMap[selectedId] || '';
+                hitungTotal();
+            }
 
-            document.getElementById('total_biaya').value = total;
-        }
+            if (mesinSelect && durasiInput) {
+                mesinSelect.addEventListener('change', isiDurasiDanHitungTotal);
 
-        document.addEventListener('DOMContentLoaded', function() {
+                // Isi langsung saat reload jika ada value
+                if (mesinSelect.value) {
+                    isiDurasiDanHitungTotal();
+                }
+            }
+
+            function hitungTotal() {
+                const koin = parseInt(document.getElementById('koin')?.value) || 0;
+                const berat = parseFloat(document.getElementById('berat')?.value) || 0;
+                const detergent = parseInt(document.getElementById('detergent')?.value) || 0;
+
+                const beratCost = (berat > 0) ? (berat / 7) * 31000 : 0;
+                const total = (koin * 12000) + beratCost + (detergent * 1000);
+
+                document.getElementById('total_biaya').value = Math.round(total);
+            }
+
             ['koin', 'berat', 'detergent'].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) {

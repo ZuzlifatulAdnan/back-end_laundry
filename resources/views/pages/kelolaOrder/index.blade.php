@@ -95,8 +95,7 @@
                                                         </div>
                                                         <div class="col-md-3 mb-2">
                                                             <input type="text" name="search" class="form-control"
-                                                                placeholder="Cari "
-                                                                value="{{ request('search') }}">
+                                                                placeholder="Cari " value="{{ request('search') }}">
                                                         </div>
                                                         <div class="col-md-1 mb-2">
                                                             <button class="btn btn-primary w-100" type="submit">
@@ -150,6 +149,50 @@
                                                                 title="Lihat Detail">
                                                                 <i class="fas fa-eye"></i>
                                                             </a>
+                                                            {{-- Tombol WhatsApp --}}
+                                                            @php
+                                                                $phone = preg_replace(
+                                                                    '/[^0-9]/',
+                                                                    '',
+                                                                    $order->user->no_handphone ?? '',
+                                                                );
+                                                                if (Str::startsWith($phone, '0')) {
+                                                                    $phone = '62' . substr($phone, 1); // konversi 08xx ke 628xx
+                                                                }
+
+                                                                $message = urlencode(
+                                                                    "Halo *{$order->user->name}*,\n\nBerikut detail pesanan Anda:\n\n" .
+                                                                        "📦 *No Order:* {$order->no_order}\n" .
+                                                                        '🗓️ *Tanggal Order:* ' .
+                                                                        \Carbon\Carbon::parse(
+                                                                            $order->tanggal_order,
+                                                                        )->translatedFormat('d M Y') .
+                                                                        "\n" .
+                                                                        "💼 *Layanan:* {$order->service_type}\n" .
+                                                                        "💳 *Metode Pembayaran:* {$order->metode_pembayaran}\n" .
+                                                                        "💸 *Status Pembayaran:* {$order->status_pembayaran}\n" .
+                                                                        "📌 *Status Order:* {$order->status}\n" .
+                                                                        '💰 *Total Biaya:* Rp' .
+                                                                        number_format(
+                                                                            $order->total_biaya,
+                                                                            0,
+                                                                            ',',
+                                                                            '.',
+                                                                        ) .
+                                                                        "\n\n" .
+                                                                        'Silakan lakukan pembayaran atau hubungi kami jika ada pertanyaan. Terima kasih. 🙏',
+                                                                );
+
+                                                                $waUrl = "https://wa.me/{$phone}?text={$message}";
+                                                            @endphp
+
+                                                            {{-- @if ($phone) --}}
+                                                                <a href="{{ $waUrl }}" target="_blank"
+                                                                    class="btn btn-sm btn-icon btn-success m-1"
+                                                                    title="Chat WhatsApp">
+                                                                    <i class="fab fa-whatsapp"></i>
+                                                                </a>
+                                                            {{-- @endif --}}
                                                             <form action="{{ route('kelolaOrder.destroy', $order) }}"
                                                                 method="post">
                                                                 @csrf

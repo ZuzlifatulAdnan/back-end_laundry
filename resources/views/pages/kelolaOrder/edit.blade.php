@@ -43,7 +43,7 @@
                                             @foreach ($mesins as $mesin)
                                                 <option value="{{ $mesin->id }}"
                                                     {{ $order->mesin_id == $mesin->id ? 'selected' : '' }}>
-                                                    {{ $mesin->nama }}
+                                                    {{ $mesin->nama }} - {{ $mesin->type }}
                                                 </option>
                                             @endforeach
                                         </select>

@@ -51,12 +51,14 @@ class MesinController extends Controller
         $request->validate([
             'nama' => 'required|string',
             'type'=> 'required|string',
+            'durasi' => 'required|numeric',
             'status'=> 'required|string',
         ]);
 
         $mesin = mesin::create([
             'nama' => $request->nama,
             'type'=> $request->type,
+            'durasi' => $request->durasi,
             'status'=> $request->status,
         ]);
 
@@ -83,12 +85,14 @@ class MesinController extends Controller
         $request->validate([
             'nama' => 'required|string',
             'type'=> 'required|string',
+            'durasi' => 'required|numeric',
             'status'=> 'required|string',
         ]);
 
         $mesin->update([
             'nama' => $request->nama,
             'type'=> $request->type,
+            'durasi' => $request->durasi,
             'status'=> $request->status,
         ]);
 

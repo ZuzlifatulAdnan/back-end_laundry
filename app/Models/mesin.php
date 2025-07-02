@@ -11,6 +11,7 @@ class mesin extends Model
     protected $fillable = [
         'nama',
         'type',
+        'durasi',
         'status',
     ];
     public function order()

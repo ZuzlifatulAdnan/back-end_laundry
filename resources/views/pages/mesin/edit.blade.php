@@ -59,6 +59,18 @@
                                                 @enderror
                                             </div>
                                         </div>
+                                        <div class="row">
+                                            <!-- Durasi -->
+                                            <div class="form-group col-md-12 mb-3">
+                                                <label for="durasi" class="form-label">Durasi(Menit)</label>
+                                                <input type="number" class="form-control" id="durasi" name="durasi"
+                                                    value="{{ old('durasi', $mesin->durasi) }}"
+                                                    placeholder="Masukkan Durasi(Menit)">
+                                                @error('durasi')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                        </div>
                                         <!-- status -->
                                         <div class="row">
                                             <div class="form-group col-md-12 mb-3">
