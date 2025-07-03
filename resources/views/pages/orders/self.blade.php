@@ -34,21 +34,22 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="mesin_id">Pilih Mesin</label>
-                                    <select id="mesin_id" name="mesin_id" class="form-control select" required>
+                                    <label for="mesin_id">Mesin</label>
+                                    <select name="mesin_id" id="mesin_id" class="form-control select2">
                                         <option value="">-- Pilih Mesin --</option>
                                         @foreach ($mesins as $mesin)
-                                            <option value="{{ $mesin->id }}"
-                                                {{ request('mesin_id') == $mesin->id ? 'selected' : '' }}>
-                                                {{ $mesin->nama }}</option>
+                                            <option value="{{ $mesin->id }}" data-durasi="{{ $mesin->durasi }}"
+                                                {{ old('mesin_id') == $mesin->id ? 'selected' : '' }}>
+                                                {{ $mesin->nama }} - {{ $mesin->type }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="durasi">Durasi (menit)</label>
-                                    <input type="number" name="durasi" id="durasi" class="form-control" min="1"
-                                        value="0" required>
+                                    <input type="number" class="form-control" name="durasi" id="durasi"
+                                        value="{{ old('durasi') }}" readonly>
                                 </div>
 
                                 <div class="form-group">
@@ -84,25 +85,33 @@
 @endsection
 
 @push('scripts')
+    <script src="{{ asset('library/select2/dist/js/select2.full.min.js') }}"></script>
     <script>
-        function hitungTotal() {
-            const koin = parseInt(document.getElementById('koin')?.value) || 0;
-            const total = koin * 12000;
+        $(document).ready(function() {
+            $('.select2').select2();
 
-            document.getElementById('total_biaya_display').value = formatRupiah(total);
-            document.getElementById('total_biaya').value = total;
-        }
-
-        function formatRupiah(angka) {
-            return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const koinEl = document.getElementById('koin');
-            if (koinEl) {
-                koinEl.addEventListener('input', hitungTotal);
+            // Hitung total biaya
+            function hitungTotal() {
+                const koin = parseInt($('#koin').val()) || 0;
+                const total = koin * 12000;
+                $('#total_biaya').val(Math.round(total));
+                $('#total_biaya_display').val('Rp ' + total.toLocaleString('id-ID'));
             }
+
+            $('#koin').on('input', hitungTotal);
             hitungTotal();
+
+            // Auto isi durasi dari mesin
+            $('#mesin_id').on('change', function() {
+                const selectedDurasi = $(this).find(':selected').data('durasi');
+                $('#durasi').val(selectedDurasi || '');
+            });
+
+            // Isi durasi awal jika ada mesin terpilih
+            const initialDurasi = $('#mesin_id').find(':selected').data('durasi');
+            if (initialDurasi) {
+                $('#durasi').val(initialDurasi);
+            }
         });
     </script>
 @endpush

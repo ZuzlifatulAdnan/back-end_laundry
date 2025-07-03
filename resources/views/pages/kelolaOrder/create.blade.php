@@ -41,6 +41,7 @@
                                             <option value="">-- Pilih Mesin --</option>
                                             @foreach ($mesins as $mesin)
                                                 <option value="{{ $mesin->id }}"
+                                                    data-durasi="{{ $mesin->durasi }}"
                                                     {{ old('mesin_id') == $mesin->id ? 'selected' : '' }}>
                                                     {{ $mesin->nama }} - {{ $mesin->type }}
                                                 </option>
@@ -53,44 +54,54 @@
                                         <label for="service_type">Tipe Layanan</label>
                                         <select name="service_type" id="service_type" class="form-control">
                                             <option value=""> -- Pilih Tipe Layanan -- </option>
-                                            <option value="Self Service" {{ old('service_type') == 'Self Service' ? 'selected' : '' }}>Self Service</option>
-                                            <option value="Drop Off" {{ old('service_type') == 'Drop Off' ? 'selected' : '' }}>Drop Off</option>
+                                            <option value="Self Service"
+                                                {{ old('service_type') == 'Self Service' ? 'selected' : '' }}>
+                                                Self Service</option>
+                                            <option value="Drop Off"
+                                                {{ old('service_type') == 'Drop Off' ? 'selected' : '' }}>
+                                                Drop Off</option>
                                         </select>
                                     </div>
 
                                     {{-- TANGGAL & JAM --}}
                                     <div class="form-group col-md-3">
                                         <label for="tanggal_order">Tanggal Order</label>
-                                        <input type="date" class="form-control" name="tanggal_order" value="{{ old('tanggal_order') }}">
+                                        <input type="date" class="form-control" name="tanggal_order"
+                                            value="{{ old('tanggal_order') }}">
                                     </div>
 
                                     <div class="form-group col-md-3">
                                         <label for="jam_order">Jam Order</label>
-                                        <input type="time" class="form-control" name="jam_order" value="{{ old('jam_order') }}">
+                                        <input type="time" class="form-control" name="jam_order"
+                                            value="{{ old('jam_order') }}">
                                     </div>
 
                                     {{-- DURASI --}}
                                     <div class="form-group col-md-3">
                                         <label for="durasi">Durasi (menit)</label>
-                                        <input type="number" class="form-control" name="durasi" id="durasi" value="{{ old('durasi') }}" readonly>
+                                        <input type="number" class="form-control" name="durasi" id="durasi"
+                                            value="{{ old('durasi') }}" readonly>
                                     </div>
 
                                     {{-- KOIN --}}
                                     <div class="form-group col-md-3">
                                         <label for="koin">Jumlah Koin</label>
-                                        <input type="number" id="koin" class="form-control" name="koin" value="{{ old('koin') }}">
+                                        <input type="number" id="koin" class="form-control" name="koin"
+                                            value="{{ old('koin') }}">
                                     </div>
 
                                     {{-- BERAT --}}
                                     <div class="form-group col-md-3">
                                         <label for="berat">Berat (kg)</label>
-                                        <input type="number" step="0.1" id="berat" class="form-control" name="berat" value="{{ old('berat') }}">
+                                        <input type="number" step="0.1" id="berat" class="form-control"
+                                            name="berat" value="{{ old('berat') }}">
                                     </div>
 
                                     {{-- DETERGENT --}}
                                     <div class="form-group col-md-3">
                                         <label for="detergent">Jumlah Detergen</label>
-                                        <input type="number" id="detergent" class="form-control" name="detergent" value="{{ old('detergent') }}">
+                                        <input type="number" id="detergent" class="form-control" name="detergent"
+                                            value="{{ old('detergent') }}">
                                     </div>
 
                                     {{-- CATATAN --}}
@@ -102,7 +113,8 @@
                                     {{-- TOTAL BIAYA --}}
                                     <div class="form-group col-md-3">
                                         <label for="total_biaya">Total Biaya</label>
-                                        <input type="number" id="total_biaya" name="total_biaya" class="form-control" readonly value="{{ old('total_biaya') }}">
+                                        <input type="number" id="total_biaya" name="total_biaya" class="form-control"
+                                            readonly value="{{ old('total_biaya') }}">
                                     </div>
 
                                     {{-- STATUS --}}
@@ -110,11 +122,16 @@
                                         <label for="status">Status</label>
                                         <select name="status" class="form-control">
                                             <option value=""> -- Pilih Status -- </option>
-                                            <option value="Diterima" {{ old('status') == 'Diterima' ? 'selected' : '' }}>Diterima</option>
-                                            <option value="Diproses" {{ old('status') == 'Diproses' ? 'selected' : '' }}>Diproses</option>
-                                            <option value="Dibatalkan" {{ old('status') == 'Dibatalkan' ? 'selected' : '' }}>Dibatalkan</option>
-                                            <option value="Ditunda" {{ old('status') == 'Ditunda' ? 'selected' : '' }}>Ditunda</option>
-                                            <option value="Selesai" {{ old('status') == 'Selesai' ? 'selected' : '' }}>Selesai</option>
+                                            <option value="Diterima" {{ old('status') == 'Diterima' ? 'selected' : '' }}>
+                                                Diterima</option>
+                                            <option value="Diproses" {{ old('status') == 'Diproses' ? 'selected' : '' }}>
+                                                Diproses</option>
+                                            <option value="Dibatalkan"
+                                                {{ old('status') == 'Dibatalkan' ? 'selected' : '' }}>Dibatalkan</option>
+                                            <option value="Ditunda" {{ old('status') == 'Ditunda' ? 'selected' : '' }}>
+                                                Ditunda</option>
+                                            <option value="Selesai" {{ old('status') == 'Selesai' ? 'selected' : '' }}>
+                                                Selesai</option>
                                         </select>
                                     </div>
 
@@ -139,43 +156,30 @@
         $(document).ready(function () {
             $('.select2').select2();
 
-            // Ambil durasi dari mesin
-            const mesinDurasiMap = @json($mesins->pluck('durasi', 'id')->toArray());
-            const mesinSelect = document.getElementById('mesin_id');
-            const durasiInput = document.getElementById('durasi');
-
-            function isiDurasiDanHitungTotal() {
-                const selectedId = mesinSelect.value;
-                durasiInput.value = mesinDurasiMap[selectedId] || '';
-                hitungTotal();
-            }
-
-            if (mesinSelect && durasiInput) {
-                mesinSelect.addEventListener('change', isiDurasiDanHitungTotal);
-
-                // Isi langsung saat reload jika ada value
-                if (mesinSelect.value) {
-                    isiDurasiDanHitungTotal();
-                }
-            }
-
+            // Hitung total biaya
             function hitungTotal() {
-                const koin = parseInt(document.getElementById('koin')?.value) || 0;
-                const berat = parseFloat(document.getElementById('berat')?.value) || 0;
-                const detergent = parseInt(document.getElementById('detergent')?.value) || 0;
-
-                const beratCost = (berat > 0) ? (berat / 7) * 31000 : 0;
+                const koin = parseInt($('#koin').val()) || 0;
+                const berat = parseFloat($('#berat').val()) || 0;
+                const detergent = parseInt($('#detergent').val()) || 0;
+                const beratCost = berat > 0 ? (berat / 7) * 31000 : 0;
                 const total = (koin * 12000) + beratCost + (detergent * 1000);
-
-                document.getElementById('total_biaya').value = Math.round(total);
+                $('#total_biaya').val(Math.round(total));
             }
 
-            ['koin', 'berat', 'detergent'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) {
-                    el.addEventListener('input', hitungTotal);
-                }
+            $('#koin, #berat, #detergent').on('input', hitungTotal);
+            hitungTotal();
+
+            // Auto isi durasi dari mesin
+            $('#mesin_id').on('change', function () {
+                const selectedDurasi = $(this).find(':selected').data('durasi');
+                $('#durasi').val(selectedDurasi || '');
             });
+
+            // Jalankan sekali saat halaman dimuat jika ada mesin terpilih
+            const initialDurasi = $('#mesin_id').find(':selected').data('durasi');
+            if (initialDurasi) {
+                $('#durasi').val(initialDurasi);
+            }
         });
     </script>
 @endpush

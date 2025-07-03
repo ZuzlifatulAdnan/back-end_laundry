@@ -64,7 +64,7 @@ class KelolaOrderController extends Controller
     {
         $type_menu = 'kelolaOrder';
         $users = User::all();
-        $mesins = Mesin::select('id', 'nama', 'type', 'durasi')->get();
+        $mesins = Mesin::all();
         return view('pages.kelolaOrder.create', compact('type_menu', 'users', 'mesins'));
     }
 
