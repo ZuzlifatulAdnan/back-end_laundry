@@ -65,30 +65,30 @@
                         <ol class="carousel-indicators">
                             <li data-target="#carouselCustomer" data-slide-to="0" class="active"></li>
                             <li data-target="#carouselCustomer" data-slide-to="1"></li>
-                            <li data-target="#carouselCustomer" data-slide-to="2"></li>
+                            {{-- <li data-target="#carouselCustomer" data-slide-to="2"></li> --}}
                         </ol>
                         <div class="carousel-inner rounded">
                             <div class="carousel-item active">
-                                <img src="{{ asset('img/beranda/customer1.jpg') }}" class="d-block w-100" alt="Slide 1">
+                                <img src="{{ asset('img/beranda/beranda1.jpeg') }}" class="d-block w-100" alt="Slide 1">
                                 <div class="carousel-caption d-none d-md-block">
                                     <h5>Selamat Datang di Clean Wash</h5>
                                     <p>Laundry cepat, bersih, dan profesional.</p>
                                 </div>
                             </div>
                             <div class="carousel-item">
-                                <img src="{{ asset('img/beranda/customer1.jpg') }}" class="d-block w-100" alt="Slide 2">
+                                <img src="{{ asset('img/beranda/beranda2.jpeg') }}" class="d-block w-100" alt="Slide 2">
                                 <div class="carousel-caption d-none d-md-block">
-                                    <h5>Pesan Self Service</h5>
-                                    <p>Pilih mesin sesuai kebutuhan Anda kapan saja.</p>
+                                    <h5>Promo Limited Edition</h5>
+                                    <p>Promo di semua cabang selama masih tersedia.</p>
                                 </div>
                             </div>
-                            <div class="carousel-item">
+                            {{-- <div class="carousel-item">
                                 <img src="{{ asset('img/beranda/customer1.jpg') }}" class="d-block w-100" alt="Slide 3">
                                 <div class="carousel-caption d-none d-md-block">
                                     <h5>Antar Jemput Tersedia</h5>
                                     <p>Hemat waktu dengan layanan antar jemput.</p>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                         <a class="carousel-control-prev" href="#carouselCustomer" role="button" data-slide="prev">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
