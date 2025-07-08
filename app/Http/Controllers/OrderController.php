@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\mesin;
 use App\Models\order;
 use App\Models\pembayaran;
+use App\Services\FonnteService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -20,7 +21,7 @@ class OrderController extends Controller
     }
 
     // 🔹 Simpan data order Self Service
-    public function storeSelfservice(Request $request)
+    public function storeSelfservice(Request $request, FonnteService $fonnte)
     {
         $request->validate([
             'mesin_id' => 'required|exists:mesins,id',
@@ -62,8 +63,53 @@ class OrderController extends Controller
             'jumlah_dibayar' => $order->total_biaya,
             'status' => 'Menunggu Pembayaran',
         ]);
+
+        // Kirim notifikasi
+        $fonnteService = app(FonnteService::class);
+
+        // 🔹 Kirim ke admin
+        $adminPhone = '6282178535114';
+        $user = Auth::user();
+        ;
+        $messageAdmin = "🧺 *Pesanan SelfService Baru!*\n\n" .
+            "👤 *Pelanggan:* {$user->name}\n" .
+            "🧾 *No Order:* {$order->no_order}\n" .
+            "📅 *Tanggal Order:* {$order->tanggal_order}\n" .
+            "⏰ *Jam Order:* {$order->jam_order}\n" .
+            "⏳ *Durasi:* {$order->durasi} menit\n" .
+            "🪙 *Mesin:* {$order->mesin->nama}\n" .
+            "💰 *Koin:* {$order->koin}\n" .
+            "📝 *Catatan:* " . ($order->catatan ?: '-') . "\n" .
+            "💵 *Total Biaya:* Rp " . number_format($order->total_biaya, 0, ',', '.') . "\n\n" .
+            "📌 *Layanan:* {$order->service_type}\n\n" .
+            "✅ Segera cek & kelola pesanan ini melalui sistem admin:\n" .
+            "🔗 https://laundryku.com/kelolaOrder\n\n" .
+            "Terima kasih 🙏";
+
+        $fonnteService->sendMessage($adminPhone, $messageAdmin);
+
+        // 🔹 Kirim ke pelanggan
+        $customerPhone = $order->user->no_handphone;
+
+        if ($customerPhone) {
+            $messageCustomer = "🧺 *Pesanan Self Service Anda!*\n\n" .
+                "🧾 *No Order:* {$order->no_order}\n" .
+                "📅 *Tanggal Order:* {$order->tanggal_order}\n" .
+                "⏰ *Jam Order:* {$order->jam_order}\n" .
+                "⏳ *Durasi:* {$order->durasi} menit\n" .
+                "🪙 *Mesin:* {$order->mesin->nama}\n" .
+                "💰 *Koin:* {$order->koin}\n" .
+                "📝 *Catatan:* " . ($order->catatan ?: '-') . "\n" .
+                "💵 *Total Biaya:* Rp " . number_format($order->total_biaya, 0, ',', '.') . "\n\n" .
+                "📌 *Layanan:* {$order->service_type}\n\n" .
+                "💳 *Status Pembayaran:* {$pembayaran->status}\n" .
+                "💰 *Jumlah yang harus dibayar:* Rp " . number_format($pembayaran->jumlah_dibayar, 0, ',', '.') . "\n\n" .
+                "Terima kasih 🙏";
+
+            $fonnteService->sendMessage($customerPhone, $messageCustomer);
+        }
         return redirect()->route('pembayaran.edit', $pembayaran->id)
-            ->with('success', 'Order Self Service dengan No Order'.$order->no_order.'berhasil dibuat. Silakan lengkapi pembayaran Anda.');
+            ->with('success', 'Order Self Service dengan No Order ' . $order->no_order . ' berhasil dibuat. Silakan lengkapi pembayaran Anda.');
     }
 
     // 🔹 Tampilkan form untuk Drop Off
@@ -98,7 +144,7 @@ class OrderController extends Controller
             'jam_order' => $request->jam_order,
             'berat' => $request->berat,
             'detergent' => $request->detergent,
-            'tangal_ambil' => $request->tanggal_ambil,
+            'tanggal_ambil' => $request->tanggal_ambil,
             'catatan' => $request->catatan,
             'status' => 'Diproses',
             'total_biaya' => $request->total_biaya,
@@ -116,7 +162,48 @@ class OrderController extends Controller
             'jumlah_dibayar' => $order->total_biaya,
             'status' => 'Menunggu Pembayaran',
         ]);
+        // Kirim notifikasi
+        $fonnteService = app(FonnteService::class);
+
+        // 🔹 Kirim ke admin
+        $adminPhone = '6282178535114';
+        $user = Auth::user();
+
+        $messageAdmin = "🧺 *Pesanan DropOff Baru!*\n\n" .
+            "👤 *Pelanggan:* {$user->name}\n" .
+            "🧾 *No Order:* {$order->no_order}\n" .
+            "📅 *Tanggal Order:* {$order->tanggal_order}\n" .
+            "⏰ *Jam Order:* {$order->jam_order}\n" .
+            "⚖️ *Berat Cucian:* {$order->berat} kg\n" .
+            "🧼 *Detergent:* {$order->detergent}\n" .
+            "📝 *Catatan:* " . ($order->catatan ?: '-') . "\n" .
+            "💵 *Total Biaya:* Rp " . number_format($order->total_biaya, 0, ',', '.') . "\n\n" .
+            "📌 *Layanan:* {$order->service_type}\n\n" .
+            "✅ Segera cek & kelola pesanan ini melalui sistem admin:\n" .
+            "🔗 https://laundryku.com/kelolaOrder\n\n" .
+            "Terima kasih 🙏";
+
+        $fonnteService->sendMessage($adminPhone, $messageAdmin);
+
+        // 🔹 Kirim ke pelanggan
+        $customerPhone = $order->user->no_handphone;
+
+        if ($customerPhone) {
+            $messageCustomer = "🧺 *Pesanan DropOff Anda!*\n\n" .
+                "🧾 *No Order:* {$order->no_order}\n" .
+                "📅 *Tanggal Order:* {$order->tanggal_order}\n" .
+                "⏰ *Jam Order:* {$order->jam_order}\n" .
+                "⚖️ *Berat Cucian:* {$order->berat} kg\n" .
+                "🧼 *Detergent:* {$order->detergent}\n" .
+                "📝 *Catatan:* " . ($order->catatan ?: '-') . "\n" .
+                "💵 *Total Biaya:* Rp " . number_format($order->total_biaya, 0, ',', '.') . "\n\n" .
+                "📌 *Layanan:* {$order->service_type}\n\n" .
+                "Terima kasih 🙏";
+
+            $fonnteService->sendMessage($customerPhone, $messageCustomer);
+        }
+
         return redirect()->route('pembayaran.edit', $pembayaran->id)
-            ->with('success', 'Order DropOff dengan No Order'.$order->no_order.'berhasil dibuat. Silakan lengkapi pembayaran Anda.');
+            ->with('success', 'Order DropOff dengan No Order' . $order->no_order . 'berhasil dibuat. Silakan lengkapi pembayaran Anda.');
     }
 }

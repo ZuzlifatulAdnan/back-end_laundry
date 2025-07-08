@@ -70,7 +70,7 @@
                                 </div>
 
                                 <button type="submit" class="btn btn-danger">Simpan</button>
-                                <a href="javascript:history.back()" class="btn btn-secondary">Kembali</a>
+                                <a href="javascript:history.back()" class="btn btn-warning">Kembali</a>
                             </div>
                         </div>
                     </form>

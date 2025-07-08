@@ -4,54 +4,55 @@ namespace App\Http\Controllers;
 
 use App\Models\order;
 use App\Models\pembayaran;
+use App\Services\FonnteService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 
 class PembayaranController extends Controller
 {
-    public function create(Request $request)
-    {
-        $type_menu = 'order';
-        $order_id = $request->query('order_id');
-        $order = Order::with('user')->findOrFail($order_id);
-        return view('pages.pembayaran.create', compact('type_menu', 'order'));
-    }
+    // public function create(Request $request)
+    // {
+    //     $type_menu = 'order';
+    //     $order_id = $request->query('order_id');
+    //     $order = Order::with('user')->findOrFail($order_id);
+    //     return view('pages.pembayaran.create', compact('type_menu', 'order'));
+    // }
 
-    public function store(Request $request)
-    {
-        // validasi data dari form tambah user
-        $validatedData = $request->validate([
-            'order_id' => 'required',
-            'metode_pembayaran' => 'required',
-            'jumlah_bayar' => 'required',
-            'bukti_bayar' => 'required|mimes:jpg,jpeg,png,gif',
-        ]);
-        // Handle the image upload if present
-        $imagePath = null;
-        if ($request->hasFile('bukti_bayar')) {
-            $image = $request->file('bukti_bayar');
-            $imagePath = uniqid() . '.' . $image->getClientOriginalExtension();
-            $image->move('img/bukti_bayar/', $imagePath);
-        }
-        // Buat no_pembayaran
-        $tanggal = date('Ymd');
-        $jumlahPembayaranHariIni = Pembayaran::whereDate('created_at', now()->toDateString())->count() + 1;
-        $no_pembayaran = 'PAY-' . $tanggal . '-' . str_pad($jumlahPembayaranHariIni, 3, '0', STR_PAD_LEFT);
+    // public function store(Request $request)
+    // {
+    //     // validasi data dari form tambah user
+    //     $validatedData = $request->validate([
+    //         'order_id' => 'required',
+    //         'metode_pembayaran' => 'required',
+    //         'jumlah_bayar' => 'required',
+    //         'bukti_bayar' => 'required|mimes:jpg,jpeg,png,gif',
+    //     ]);
+    //     // Handle the image upload if present
+    //     $imagePath = null;
+    //     if ($request->hasFile('bukti_bayar')) {
+    //         $image = $request->file('bukti_bayar');
+    //         $imagePath = uniqid() . '.' . $image->getClientOriginalExtension();
+    //         $image->move('img/bukti_bayar/', $imagePath);
+    //     }
+    //     // Buat no_pembayaran
+    //     $tanggal = date('Ymd');
+    //     $jumlahPembayaranHariIni = Pembayaran::whereDate('created_at', now()->toDateString())->count() + 1;
+    //     $no_pembayaran = 'PAY-' . $tanggal . '-' . str_pad($jumlahPembayaranHariIni, 3, '0', STR_PAD_LEFT);
 
-        //masukan data kedalam tabel users
-        pembayaran::create([
-            'no_pembayaran' => $no_pembayaran,
-            'order_id' => $validatedData['order_id'],
-            'metode_pembayaran' => $validatedData['metode_pembayaran'],
-            'jumlah_dibayar' => $validatedData['jumlah_bayar'],
-            'bukti_bayar' => $imagePath,
-            'status' => 'Proses Pembayaran'
-        ]);
+    //     //masukan data kedalam tabel users
+    //     pembayaran::create([
+    //         'no_pembayaran' => $no_pembayaran,
+    //         'order_id' => $validatedData['order_id'],
+    //         'metode_pembayaran' => $validatedData['metode_pembayaran'],
+    //         'jumlah_dibayar' => $validatedData['jumlah_bayar'],
+    //         'bukti_bayar' => $imagePath,
+    //         'status' => 'Proses Pembayaran'
+    //     ]);
 
-        //jika proses berhsil arahkan kembali ke halaman users dengan status success
-        return Redirect::route('riwayat.index')->with('success', 'Pembayaran dengan No Pembayaran '. $no_pembayaran . ' berhasil ditambah.');
-    }
+    //     //jika proses berhsil arahkan kembali ke halaman users dengan status success
+    //     return Redirect::route('riwayat.index')->with('success', 'Pembayaran dengan No Pembayaran '. $no_pembayaran . ' berhasil ditambah.');
+    // }
     public function edit($id)
     {
         $type_menu = 'riwayat';
@@ -89,7 +90,43 @@ class PembayaranController extends Controller
                 'status' => 'Proses Pembayaran'
             ]);
         }
+        // Ambil order & user terkait pembayaran
+        $order = $pembayaran->order;
+        $user = $order->user;
 
-        return Redirect::route('riwayat.index', $pembayaran->order_id)->with('success ', 'Pembayaran'.$pembayaran->no_pembayaran. ' berhasil diperbarui.');
+        // Kirim notifikasi
+        $fonnteService = app(FonnteService::class);
+
+        // 🔹 Kirim ke admin
+        $adminPhone = '6282178535114';
+        $messageAdmin = "💳 *Pembayaran Baru Diterima!*\n\n" .
+            "👤 *Pelanggan:* {$user->name}\n" .
+            "🧾 *No Order:* {$order->no_order}\n" .
+            "📅 *Tanggal Order:* {$order->tanggal_order}\n" .
+            "💳 *Metode Pembayaran:* {$pembayaran->metode_pembayaran}\n" .
+            "💵 *Jumlah Dibayar:* Rp " . number_format($pembayaran->jumlah_dibayar, 0, ',', '.') . "\n" .
+            "📄 *Status:* {$pembayaran->status}\n\n" .
+            "✅ Segera cek & verifikasi pembayaran ini di sistem admin:\n" .
+            "🔗 https://laundryku.com/kelolaPembayaran\n\n" .
+            "Terima kasih 🙏";
+
+        $fonnteService->sendMessage($adminPhone, $messageAdmin);
+
+        // 🔹 Kirim ke pelanggan
+        $customerPhone = $user->no_handphone;
+
+        if ($customerPhone) {
+            $messageCustomer = "💳 *Pembayaran Anda Berhasil Diterima!*\n\n" .
+                "🧾 *No Order:* {$order->no_order}\n" .
+                "📅 *Tanggal Order:* {$order->tanggal_order}\n" .
+                "💳 *Metode Pembayaran:* {$pembayaran->metode_pembayaran}\n" .
+                "💵 *Jumlah Dibayar:* Rp " . number_format($pembayaran->jumlah_dibayar, 0, ',', '.') . "\n" .
+                "📄 *Status:* {$pembayaran->status}\n\n" .
+                "🙏 Terima kasih telah melakukan pembayaran. Kami akan segera memproses pesanan Anda.";
+
+            $fonnteService->sendMessage($customerPhone, $messageCustomer);
+        }
+
+        return Redirect::route('riwayat.index', $pembayaran->order_id)->with('success ', 'Pembayaran' . $pembayaran->no_pembayaran . ' berhasil diperbarui.');
     }
 }
