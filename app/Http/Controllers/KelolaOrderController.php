@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\mesin;
 use App\Models\order;
 use App\Models\User;
+use App\Services\FonnteService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -199,6 +200,28 @@ class KelolaOrderController extends Controller
             $order->pembayaran->status = $request->status_pembayaran;
             $order->pembayaran->save();
         }
+        // Kirim notifikasi
+        $fonnteService = app(FonnteService::class);
+        // 🔹 Kirim ke pelanggan
+        $customerPhone = $order->user->no_handphone;
+
+        if ($customerPhone) {
+            $messageCustomer = "🧺 *Pesanan Self Service Anda!*\n\n" .
+                "🧾 *No Order:* {$order->no_order}\n" .
+                "📅 *Tanggal Order:* {$order->tanggal_order}\n" .
+                "⏰ *Jam Order:* {$order->jam_order}\n" .
+                "⏳ *Durasi:* {$order->durasi} menit\n" .
+                "🪙 *Mesin:* {$order->mesin->nama}\n" .
+                "💰 *Koin:* {$order->koin}\n" .
+                "📝 *Catatan:* " . ($order->catatan ?: '-') . "\n" .
+                "💵 *Total Biaya:* Rp " . number_format($order->total_biaya, 0, ',', '.') . "\n\n" .
+                "📌 *Layanan:* {$order->service_type}\n\n" .
+                "💳 *Status Pembayaran:* " . ($order->pembayaran->status ?? '-') . "\n" .
+                "💰 *Jumlah yang harus dibayar:* Rp " . number_format($order->pembayaran->jumlah_dibayar ?? 0, 0, ',', '.') . "\n\n" .
+                "Terima kasih 🙏";
+
+            $fonnteService->sendMessage($customerPhone, $messageCustomer);
+        }
 
         return redirect()->back()->with('success', 'Status order ' . $order->no_order . ' berhasil diperbarui.');
     }
@@ -213,12 +236,53 @@ class KelolaOrderController extends Controller
     {
         $order = Order::findOrFail($id);
 
-        $deadline = Carbon::parse($order->tanggal_order . ' ' . $order->jam_order)->addMinutes(15);
+        $deadline = Carbon::parse("{$order->tanggal_order} {$order->jam_order}")
+            ->addMinutes(15);
 
         if (now()->greaterThan($deadline) && $order->status === 'Diterima') {
             $order->status = 'Ditunda';
             $order->save();
+
+            // 🔔 Kirim notifikasi ke pelanggan bahwa pesanan ditunda
+            $customerPhone = $order->user->no_handphone;
+
+            if ($customerPhone) {
+                $messageCustomer = "🧺 *Status Pesanan Anda DITUNDA!*\n\n" .
+                    "Kami informasikan bahwa pesanan Self Service Anda:\n\n" .
+                    "🧾 *No Order:* {$order->no_order}\n" .
+                    "📅 *Tanggal Order:* {$order->tanggal_order}\n" .
+                    "⏰ *Jam Order:* {$order->jam_order}\n\n" .
+                    "telah *melewati batas waktu* yang ditentukan (lebih dari 15 menit) dan otomatis ditunda oleh sistem.\n\n" .
+                    "Jika Anda masih ingin melanjutkan pesanan, *harap segera menghubungi admin* untuk proses lebih lanjut.\n\n" .
+                    "📞 Kontak Admin: 08xxxxxxxxxx\n\n" .
+                    "Terima kasih atas perhatian dan kerja samanya 🙏";
+
+                app(FonnteService::class)->sendMessage($customerPhone, $messageCustomer);
+            }
+
             return response()->json(['status' => 'Ditunda']);
+        }
+
+        // ✅ Jika pesanan masih dalam waktu yang diperbolehkan, kirim reminder
+        $customerPhone = $order->user->no_handphone;
+
+        if ($customerPhone) {
+            $messageReminder = "🧺 *Pesanan Self Service Anda!*\n\n" .
+                "🧾 *No Order:* {$order->no_order}\n" .
+                "📅 *Tanggal Order:* {$order->tanggal_order}\n" .
+                "⏰ *Jam Order:* {$order->jam_order}\n" .
+                "⏳ *Durasi:* {$order->durasi} menit\n" .
+                "🪙 *Mesin:* {$order->mesin->nama}\n" .
+                "💰 *Koin:* {$order->koin}\n" .
+                "📝 *Catatan:* " . ($order->catatan ?: '-') . "\n" .
+                "💵 *Total Biaya:* Rp " . number_format($order->total_biaya, 0, ',', '.') . "\n\n" .
+                "📌 *Layanan:* {$order->service_type}\n\n" .
+                "💳 *Status Pembayaran:* " . ($order->pembayaran->status ?? '-') . "\n" .
+                "💰 *Jumlah yang harus dibayar:* Rp " . number_format($order->pembayaran->jumlah_dibayar ?? 0, 0, ',', '.') . "\n\n" .
+                "⏰ *Mohon segera melakukan proses pemesanan sebelum waktu habis.*\n\n" .
+                "Terima kasih 🙏";
+
+            app(FonnteService::class)->sendMessage($customerPhone, $messageReminder);
         }
 
         return response()->json(['status' => 'masih berlaku'], 200);

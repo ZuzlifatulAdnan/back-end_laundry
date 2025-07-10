@@ -40,7 +40,7 @@ class OrderController extends Controller
         $order = Order::create([
             'no_order' => $no_order,
             'user_id' => Auth::id(),
-            'service_type' => 'SelfService',
+            'service_type' => 'Self Service',
             'mesin_id' => $request->mesin_id,
             'tanggal_order' => $request->tanggal_order,
             'jam_order' => $request->jam_order,
@@ -108,6 +108,7 @@ class OrderController extends Controller
 
             $fonnteService->sendMessage($customerPhone, $messageCustomer);
         }
+        
         return redirect()->route('pembayaran.edit', $pembayaran->id)
             ->with('success', 'Order Self Service dengan No Order ' . $order->no_order . ' berhasil dibuat. Silakan lengkapi pembayaran Anda.');
     }
@@ -139,7 +140,7 @@ class OrderController extends Controller
         $order = Order::create([
             'no_order' => $no_order,
             'user_id' => Auth::id(),
-            'service_type' => 'DropOff',
+            'service_type' => 'Drop Off',
             'tanggal_order' => $request->tanggal_order,
             'jam_order' => $request->jam_order,
             'berat' => $request->berat,
