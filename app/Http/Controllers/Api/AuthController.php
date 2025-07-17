@@ -33,6 +33,7 @@ class AuthController extends Controller
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
+            'role' => 'Customer',
             'no_handphone' => $validated['no_handphone'],
             'password' => Hash::make($validated['password']),
         ]);
@@ -49,7 +50,7 @@ class AuthController extends Controller
     /**
      * Login the user and issue token
      */
-      public function login(Request $request)
+    public function login(Request $request)
     {
         $request->validate([
             'email' => 'required|string|email',
@@ -81,16 +82,6 @@ class AuthController extends Controller
 
         return response()->json([
             'message' => 'Logged out successfully'
-        ]);
-    }
-
-    /**
-     * Get authenticated user's profile
-     */
-    public function profile(Request $request)
-    {
-        return response()->json([
-            'user' => $request->user()
         ]);
     }
 
