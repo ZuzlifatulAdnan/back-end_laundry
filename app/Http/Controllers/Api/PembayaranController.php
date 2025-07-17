@@ -1,61 +1,65 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\Models\order;
-use App\Models\pembayaran;
-use App\Services\FonnteService;
+use App\Http\Controllers\Controller;
+use App\Models\Pembayaran;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
-
+use App\Services\FonnteService;
 class PembayaranController extends Controller
 {
-    public function edit($id)
+    /**
+     * Tampilkan detail pembayaran
+     */
+    public function show($id)
     {
-        $type_menu = 'riwayat';
         $pembayaran = Pembayaran::with('order.user')->findOrFail($id);
-        return view('pages.pembayaran.edit', compact('pembayaran', 'type_menu'));
+
+        return response()->json([
+            'pembayaran' => $pembayaran
+        ]);
     }
 
-    public function update(Request $request, Pembayaran $pembayaran)
+    /**
+     * Update pembayaran (metode & bukti bayar)
+     */
+    public function update(Request $request, $id)
     {
-        // Validasi form
         $request->validate([
             'metode_pembayaran' => 'required',
             'bukti_bayar' => 'nullable|mimes:jpg,jpeg,png,gif|max:2048',
         ]);
 
-        // Update data pembayaran
+        $pembayaran = Pembayaran::with('order.user')->findOrFail($id);
+
         $pembayaran->update([
             'metode_pembayaran' => $request->metode_pembayaran,
         ]);
 
-        // Cek jika ada upload bukti bayar baru
+        // Upload bukti bayar jika ada
         if ($request->hasFile('bukti_bayar')) {
             $file = $request->file('bukti_bayar');
             $filename = uniqid() . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('img/bukti_bayar/'), $filename);
 
-            // Hapus file lama jika ada
+            // hapus lama jika ada
             if ($pembayaran->bukti_bayar && file_exists(public_path('img/bukti_bayar/' . $pembayaran->bukti_bayar))) {
                 unlink(public_path('img/bukti_bayar/' . $pembayaran->bukti_bayar));
             }
 
-            // Simpan nama file baru
             $pembayaran->update([
                 'bukti_bayar' => $filename,
                 'status' => 'Proses Pembayaran'
             ]);
         }
-        // Ambil order & user terkait pembayaran
+
         $order = $pembayaran->order;
         $user = $order->user;
 
-        // Kirim notifikasi
+        // 🔹 Kirim notifikasi
         $fonnteService = app(FonnteService::class);
 
-        // 🔹 Kirim ke admin
+        // 🔹 Admin
         $adminPhone = '6282178535114';
         $messageAdmin = "💳 *Pembayaran Baru Diterima!*\n\n" .
             "👤 *Pelanggan:* {$user->name}\n" .
@@ -70,9 +74,8 @@ class PembayaranController extends Controller
 
         $fonnteService->sendMessage($adminPhone, $messageAdmin);
 
-        // 🔹 Kirim ke pelanggan
+        // 🔹 Customer
         $customerPhone = $user->no_handphone;
-
         if ($customerPhone) {
             $messageCustomer = "💳 *Pembayaran Anda Berhasil Diterima!*\n\n" .
                 "🧾 *No Order:* {$order->no_order}\n" .
@@ -85,6 +88,9 @@ class PembayaranController extends Controller
             $fonnteService->sendMessage($customerPhone, $messageCustomer);
         }
 
-        return Redirect::route('riwayat.index', $pembayaran->order_id)->with('success ', 'Pembayaran' . $pembayaran->no_pembayaran . ' berhasil diperbarui.');
+        return response()->json([
+            'message' => 'Pembayaran berhasil diperbarui.',
+            'pembayaran' => $pembayaran
+        ]);
     }
 }

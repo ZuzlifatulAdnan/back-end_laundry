@@ -4,46 +4,148 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Validation\ValidationException;
+use App\Models\User;
 
 class AuthController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Register a new user
      */
-    public function index()
+    public function register(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'no_handphone' => [
+                'required',
+                'regex:/^(\+62|62|0)[0-9]{9,13}$/',
+                'unique:users,no_handphone',
+            ],
+            'password' => 'required|string|min:8|confirmed',
+        ], [
+            'no_handphone.regex' => 'No handphone harus diawali dengan 62 dan hanya angka',
+        ]);
+
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'no_handphone' => $validated['no_handphone'],
+            'password' => Hash::make($validated['password']),
+        ]);
+
+        $token = $user->createToken('api_token')->plainTextToken;
+
+        return response()->json([
+            'message' => 'Registration successful',
+            'user' => $user,
+            'token' => $token,
+        ], 201);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Login the user and issue token
      */
-    public function store(Request $request)
+      public function login(Request $request)
     {
-        //
+        $request->validate([
+            'email' => 'required|string|email',
+            'password' => 'required'
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            throw ValidationException::withMessages([
+                'email' => ['The provided credentials are incorrect.']
+            ]);
+        }
+
+        $token = $user->createToken('api-token')->plainTextToken;
+
+        return  response()->json([
+            'jwt-token' => $token,
+            'user'      => $user
+        ]);
     }
 
     /**
-     * Display the specified resource.
+     * Logout the user
      */
-    public function show(string $id)
+    public function logout(Request $request)
     {
-        //
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json([
+            'message' => 'Logged out successfully'
+        ]);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Get authenticated user's profile
      */
-    public function update(Request $request, string $id)
+    public function profile(Request $request)
     {
-        //
+        return response()->json([
+            'user' => $request->user()
+        ]);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Send forgot password email
      */
-    public function destroy(string $id)
+    public function forgotPassword(Request $request)
     {
-        //
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+        ]);
+
+        $status = Password::sendResetLink(
+            $request->only('email')
+        );
+
+        if ($status === Password::RESET_LINK_SENT) {
+            return response()->json([
+                'message' => __($status)
+            ]);
+        }
+
+        return response()->json([
+            'message' => __($status)
+        ], 400);
+    }
+
+    /**
+     * Reset password
+     */
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'token' => 'required',
+            'email' => 'required|email|exists:users,email',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user, $password) {
+                $user->forceFill([
+                    'password' => Hash::make($password)
+                ])->save();
+            }
+        );
+
+        if ($status === Password::PASSWORD_RESET) {
+            return response()->json([
+                'message' => __($status)
+            ]);
+        }
+
+        return response()->json([
+            'message' => __($status)
+        ], 400);
     }
 }
