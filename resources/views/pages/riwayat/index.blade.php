@@ -100,17 +100,8 @@
                                                         </option>
                                                     </select>
                                                 </div>
-
-                                                {{-- Search --}}
-                                                <div class="col-md-2 mb-2">
-                                                    <div class="input-group">
-                                                        <input type="text" name="search" class="form-control"
-                                                            placeholder="Cari Nama User" value="{{ request('search') }}">
-                                                        <div class="input-group-append">
-                                                            <button class="btn btn-primary" type="submit"><i
-                                                                    class="fas fa-search"></i></button>
-                                                        </div>
-                                                    </div>
+                                                <div class="col-md-2">
+                                                    <button type="submit" class="btn btn-primary btn-block">Filter</button>
                                                 </div>
                                             </div>
                                         </form>

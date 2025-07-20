@@ -14,6 +14,7 @@ class RiwayatController extends Controller
         $user = Auth::user();
 
         $status = $request->input('status');
+        $status_pembayaran = $request->input('status_pembayaran');
         $bulan = $request->input('bulan');
         $tahun = $request->input('tahun');
         $sort = $request->input('sort', 'desc');
@@ -33,19 +34,29 @@ class RiwayatController extends Controller
             12 => 'Desember'
         ];
         $years = range(date('Y') - 10, date('Y'));
-        $statusOptions = ['Proses', 'Selesai', 'Batal'];
 
-        $orders = order::with('pembayaran', 'mesin')
+        $orders = Order::with(['pembayaran', 'mesin'])
             ->where('user_id', $user->id)
             ->when($status, fn($q) => $q->where('status', $status))
             ->when($bulan, fn($q) => $q->whereMonth('tanggal_order', $bulan))
             ->when($tahun, fn($q) => $q->whereYear('tanggal_order', $tahun))
+            ->when($status_pembayaran, function ($q) use ($status_pembayaran) {
+                $q->whereHas('pembayaran', function ($q2) use ($status_pembayaran) {
+                    $q2->where('status', $status_pembayaran);
+                });
+            })
             ->orderBy('created_at', $sort)
             ->paginate(10)
             ->appends($request->all());
 
-        return view('pages.riwayat.index', compact('type_menu', 'orders', 'months', 'years', 'statusOptions'));
+        return view('pages.riwayat.index', compact(
+            'type_menu',
+            'orders',
+            'months',
+            'years'
+        ));
     }
+
 
     public function show($id)
     {
