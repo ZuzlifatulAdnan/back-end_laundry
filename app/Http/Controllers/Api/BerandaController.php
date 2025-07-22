@@ -15,7 +15,7 @@ class BerandaController extends Controller
     {
         $user = $request->user();
 
-        $mesinReady = mesin::where('status', 'Ready')->get();
+        $mesinReady = mesin::all();
 
         return response()->json([
             'user' => [

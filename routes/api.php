@@ -29,6 +29,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/beranda', [BerandaController::class, 'index']);
 
     // ORDER
+    Route::get('/order/mesin-ready', [OrderController::class, 'mesinReady']);
     Route::post('/order/selfservice', [OrderController::class, 'storeSelfservice']);
     Route::post('/order/dropoff', [OrderController::class, 'storeDropOff']);
 

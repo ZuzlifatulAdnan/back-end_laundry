@@ -60,16 +60,20 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.']
-            ]);
-        }
+        // UBAH BAGIAN INI
+        return response()->json([
+            'success' => false,
+            'message' => 'The provided credentials are incorrect.'
+        ], 401); // 401 Unauthorized
+    }
 
         $token = $user->createToken('api-token')->plainTextToken;
 
-        return  response()->json([
-            'jwt-token' => $token,
-            'user'      => $user
+        return response()->json([
+            'success' => true,                      // Tambahkan ini
+            'message' => 'Login successful',
+            'token' => $token,
+            'user' => $user
         ]);
     }
 
