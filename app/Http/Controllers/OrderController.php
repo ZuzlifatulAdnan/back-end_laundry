@@ -68,7 +68,7 @@ class OrderController extends Controller
         $fonnteService = app(FonnteService::class);
 
         // 🔹 Kirim ke admin
-        $adminPhone = '6282178535114';
+        $adminPhone = env('ADMIN_PHONE');
         $user = Auth::user();
         ;
         $messageAdmin = "🧺 *Pesanan SelfService Baru!*\n\n" .
@@ -167,7 +167,7 @@ class OrderController extends Controller
         $fonnteService = app(FonnteService::class);
 
         // 🔹 Kirim ke admin
-        $adminPhone = '6282178535114';
+        $adminPhone = env('ADMIN_PHONE');
         $user = Auth::user();
 
         $messageAdmin = "🧺 *Pesanan DropOff Baru!*\n\n" .

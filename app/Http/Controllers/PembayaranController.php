@@ -56,7 +56,7 @@ class PembayaranController extends Controller
         $fonnteService = app(FonnteService::class);
 
         // 🔹 Kirim ke admin
-        $adminPhone = '6282178535114';
+        $adminPhone = env('ADMIN_PHONE');
         $messageAdmin = "💳 *Pembayaran Baru Diterima!*\n\n" .
             "👤 *Pelanggan:* {$user->name}\n" .
             "🧾 *No Order:* {$order->no_order}\n" .

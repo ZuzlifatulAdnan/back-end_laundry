@@ -143,7 +143,7 @@ class OrderController extends Controller
     protected function kirimNotifikasi(Order $order, Pembayaran $pembayaran, FonnteService $fonnte)
     {
         $user = $order->user;
-        $adminPhone = '6282178535114';
+        $adminPhone = env('ADMIN_PHONE');;
 
         if ($order->service_type === 'Self Service') {
             $msgAdmin = "🧺 *Pesanan SelfService Baru!*\n\n" .
