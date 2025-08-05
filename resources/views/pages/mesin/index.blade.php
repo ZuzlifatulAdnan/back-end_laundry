@@ -55,13 +55,13 @@
                                                                     {{ request('status') == '' ? 'selected' : '' }}>Semua
                                                                     Status
                                                                 </option>
-                                                                <option value="Aktif"
-                                                                    {{ request('status') == 'Aktif' ? 'selected' : '' }}>
-                                                                    Aktif
+                                                                <option value="Ready"
+                                                                    {{ request('status') == 'Ready' ? 'selected' : '' }}>
+                                                                    Ready
                                                                 </option>
-                                                                <option value="Nonaktif"
-                                                                    {{ request('status') == 'Nonaktif' ? 'selected' : '' }}>
-                                                                    Nonaktif</option>
+                                                                <option value="Tidak Ready"
+                                                                    {{ request('status') == 'Tidak Ready' ? 'selected' : '' }}>
+                                                                    Tidak Ready</option>
                                                             </select>
                                                         </div>
                                                         <div class="col-md-4 mb-2">

@@ -33,5 +33,79 @@ class DatabaseSeeder extends Seeder
                 'created_at' => date('Y-m-d H:i:s')
             ]
         ]);
+        DB::table('mesins')->insert([
+            [
+                'nama' => 'Mesin 1',
+                'type' => 'Cuci',
+                'durasi' => '28',
+                'Status' => 'Ready',
+            ],
+            [
+                'nama' => 'Mesin 1',
+                'type' => 'Pengering',
+                'durasi' => '42',
+                'Status' => 'Ready',
+            ],
+            [
+                'nama' => 'Mesin 2',
+                'type' => 'Cuci',
+                'durasi' => '28',
+                'Status' => 'Ready',
+            ],
+            [
+                'nama' => 'Mesin 2',
+                'type' => 'Pengering',
+                'durasi' => '42',
+                'Status' => 'Ready',
+            ],
+            [
+                'nama' => 'Mesin 3',
+                'type' => 'Cuci',
+                'durasi' => '28',
+                'Status' => 'Ready',
+            ],
+            [
+                'nama' => 'Mesin 3',
+                'type' => 'Pengering',
+                'durasi' => '42',
+                'Status' => 'Ready',
+            ],
+            [
+                'nama' => 'Mesin 4',
+                'type' => 'Cuci',
+                'durasi' => '28',
+                'Status' => 'Ready',
+            ],
+            [
+                'nama' => 'Mesin 4',
+                'type' => 'Pengering',
+                'durasi' => '42',
+                'Status' => 'Ready',
+            ],
+            [
+                'nama' => 'Mesin 5',
+                'type' => 'Cuci',
+                'durasi' => '28',
+                'Status' => 'Ready',
+            ],
+            [
+                'nama' => 'Mesin 5',
+                'type' => 'Pengering',
+                'durasi' => '42',
+                'Status' => 'Ready',
+            ],
+             [
+                'nama' => 'Mesin 6',
+                'type' => 'Cuci',
+                'durasi' => '28',
+                'Status' => 'Ready',
+            ],
+            [
+                'nama' => 'Mesin 6',
+                'type' => 'Pengering',
+                'durasi' => '42',
+                'Status' => 'Ready',
+            ],
+        ]);
     }
 }
